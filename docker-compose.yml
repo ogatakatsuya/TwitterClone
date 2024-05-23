@@ -1,0 +1,48 @@
+version: '3'
+services:
+  frontend:
+    container_name: front
+    build:
+      dockerfile: ./frontend/Dockerfile
+      context: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /app
+      - type: volume
+        source: node_modules
+        target: /app/node_modules
+    command: npm run dev
+  
+  backend:
+    container_name: back
+    build:
+      dockerfile: ./backend/Dockerfile
+      context: .
+    volumes:
+      - ./backend/dockervenv:/src/.venv
+      - type: bind
+        source: ./backend
+        target: /app
+    working_dir: /app
+    ports:
+      - 8000:8000  # ホストマシンのポート8000を、docker内のポート8000に接続する
+  
+  db:
+    image: mysql:8.0
+    platform: linux/x86_64  # M1 Macの場合必要
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'  # rootアカウントをパスワードなしで作成
+      MYSQL_DATABASE: 'data'  # 初期データベースとしてdemoを設定
+      TZ: 'Asia/Tokyo'  # タイムゾーンを日本時間に設定
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password  # MySQL8.0ではデフォルトが"caching_sha2_password"で、ドライバが非対応のため変更
+    ports:
+      - 33306:3306  # ホストマシンのポート33306を、docker内のポート3306に接続する
+
+volumes:
+  mysql_data:
+  node_modules:
