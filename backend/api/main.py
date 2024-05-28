@@ -23,7 +23,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.get("/hello")
-async def read_root():
-    return {"message": "Hello World"}

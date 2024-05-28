@@ -13,7 +13,7 @@ from api.auth.user import authenticate_user, create_access_token, ACCESS_TOKEN_E
 router = APIRouter()
 
 @router.post("/auth/register", response_model=auth_schema.UserCreateResponse)
-async def register(
+async def register_new_account(
     auth_body : auth_schema.UserCreate, db: AsyncSession = Depends(get_db)
 ):
     return await auth_cruds.create_user(db, auth_body)
