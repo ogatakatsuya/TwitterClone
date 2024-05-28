@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from pydantic import BaseModel, Field
     
 class UserCreate(BaseModel):
@@ -7,3 +7,12 @@ class UserCreate(BaseModel):
     
 class UserCreateResponse(UserCreate):
     id: int
+    
+# トークンのデータモデル
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+# トークンに含まれるデータモデル
+class TokenData(BaseModel):
+    username: Union[str, None] = None
