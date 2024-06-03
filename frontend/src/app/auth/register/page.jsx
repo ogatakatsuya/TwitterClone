@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 const Register = () => {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [submitError, setSubmitError] = useState();
 
     const {
         register,
@@ -33,9 +34,29 @@ const Register = () => {
         formState: { errors, isSubmitting },
     } = useForm();
 
-    const onSubmit = (data) => {
-        console.log(data);
-        router.push("/auth/login");
+    const onSubmit = async (value) => {
+        try {
+        const res = await fetch('http://localhost:8000/auth/register', {
+            // ポート番号を修正
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_name : value.email, password : value.password }),
+        })
+    
+        if (!res.ok) {
+            const errorData = await res.json()
+            setSubmitError(errorData.message || '何か問題が発生しました')
+        } else {
+            const data = await res.json()
+            setSubmitError(null)
+            router.push("/auth/login")
+        }
+        } catch (err) {
+        setSubmitError('ネットワークエラーです。後で再試行してください。')
+        console.error('ネットワークエラー:', err)
+        }
     }
 
     return (
