@@ -11,7 +11,7 @@ from sqlalchemy.future import select
 
 import api.models.models as auth_model
 import api.schemes.auth as auth_schema
-from api.models.models import User
+from api.models.models import User, Password
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -27,16 +27,23 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 async def get_user(db, username: str):
-    user = await db.scalar(select(User).where(User.user_name == username))
+    user = await db.scalar(select(User).where(User.name == username))
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
-    
+
+async def get_password(db, user_id):
+    password = await db.scalar(select(Password).where(Password.user_id == user_id))
+    if password is None:
+        raise HTTPException(status_code=404, detail="Password not found")
+    return password.password
+
 async def authenticate_user(db, username: str, password: str):
     user = await get_user(db, username)
+    user_password = await get_password(db, user.id)
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(password, user_password): # passwordが入力されたパスワードでuser_passwordがdbから取ってきた正しいパスワード
         return False
     return user
 
@@ -76,12 +83,18 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     return current_user
 
 async def create_user(db: AsyncSession, user_create: auth_schema.UserCreate) -> auth_model.User:
-    hashed_password = get_password_hash(user_create.password)
-    user_data = user_create.dict()
-    user_data['password'] = hashed_password
-    
-    user = auth_model.User(**user_data)
+    user = auth_model.User(
+        name = user_create.user_name
+    )
     db.add(user)
     await db.commit()
     await db.refresh(user)
+    
+    hashed_password = get_password_hash(user_create.password)
+    password = auth_model.Password(password=hashed_password, user_id=user.id)
+    
+    db.add(password)
+    await db.commit()
+    await db.refresh(password)
+    
     return user

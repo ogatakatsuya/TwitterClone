@@ -12,13 +12,16 @@ from api.auth.user import authenticate_user, create_access_token, get_current_us
 
 router = APIRouter()
 
-@router.post("/auth/register", response_model=auth_schema.UserCreateResponse)
+@router.post("/auth/register")
 async def register_new_account(
     auth_body : auth_schema.UserCreate, db: AsyncSession = Depends(get_db)
 ):
-    return await auth_cruds.create_user(db, auth_body)
+    success = await auth_cruds.create_user(db, auth_body)
+    if not success:
+        raise HTTPException(status_code=404, detail="Register user failed")
+    return {"message" : "user created."}
 
-@router.post("/token")
+@router.post("/auth/login")
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)
 ) -> auth_schema.Token:
@@ -31,7 +34,7 @@ async def login_for_access_token(
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.user_name}, expires_delta=access_token_expires
+        data={"sub": user.id}, expires_delta=access_token_expires
     )
     return auth_schema.Token(access_token=access_token, token_type="bearer")
 
