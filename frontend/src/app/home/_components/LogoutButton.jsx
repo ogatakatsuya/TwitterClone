@@ -10,6 +10,7 @@ const LogoutButotn = () => {
         <Button
         colorScheme = "red"
         onClick = {onClick}
+        mt="4"
         >
             ログアウト
         </Button>
