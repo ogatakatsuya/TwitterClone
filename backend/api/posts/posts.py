@@ -12,7 +12,6 @@ async def create_post(db: AsyncSession, post_create: post_schema.Posts) -> post_
     post = Post(**post_data)
     db.add(post)
     await db.commit()
-    await db.refresh(post)
     return post
 
 async def get_post(db: AsyncSession):
