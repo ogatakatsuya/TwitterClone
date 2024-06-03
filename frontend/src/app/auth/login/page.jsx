@@ -33,6 +33,7 @@ const Login = () => {
         try {
             const res = await fetch('http://localhost:8000/auth/login', {
                 method: 'POST',
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded', // Content-Typeを変更
                 },

@@ -1,4 +1,5 @@
 from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,4 +37,13 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user.id}, expires_delta=access_token_expires
     )
-    return auth_schema.Token(access_token=access_token, token_type="bearer")
+    content = {"access_token":access_token, "type":"barer"}
+    response = JSONResponse(content=content)
+    response.set_cookie(key="access_token", value=access_token, httponly=True, path="/")
+    return response
+
+@router.get("/auth/logout")
+async def logout_user():
+    response = JSONResponse(content={"message": "Successfully logged out"})
+    response.delete_cookie(key="access_token", path="/")
+    return response
