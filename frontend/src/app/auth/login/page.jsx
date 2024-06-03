@@ -17,9 +17,11 @@ import {
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Login = () => {
     const router = useRouter();
+    const [submitError, setSubmitError] = useState();
 
     const {
         register,
@@ -27,10 +29,34 @@ const Login = () => {
         formState: { errors, isSubmitting },
     } = useForm();
 
-    const onSubmit = (data) => {
-        console.log(data);
-        router.push("/")
+    const onSubmit = async (value) => {
+        try {
+            const res = await fetch('http://localhost:8000/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded', // Content-Typeを変更
+                },
+                body: new URLSearchParams({
+                    'username': value.email,
+                    'password': value.password,
+                }),
+            });
+    
+            if (!res.ok) {
+                const errorData = await res.json();
+                setSubmitError(errorData.detail || '何か問題が発生しました');
+            } else {
+                const data = await res.json();
+                console.log(data);
+                setSubmitError(null);
+                router.push("/home");
+            }
+        } catch (err) {
+            setSubmitError('ネットワークエラーです。後で再試行してください。');
+            console.error('ネットワークエラー:', err);
+        }
     }
+    
 
     return (
         <Flex

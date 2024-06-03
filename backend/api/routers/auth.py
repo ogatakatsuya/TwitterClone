@@ -8,7 +8,7 @@ from api.db import get_db
 
 from typing import List
 import api.schemes.auth as auth_schema
-from api.auth.user import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from api.auth.user import authenticate_user, create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
 
 router = APIRouter()
 
@@ -34,3 +34,9 @@ async def login_for_access_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
     return auth_schema.Token(access_token=access_token, token_type="bearer")
+
+@router.post("/user")
+async def get_user(
+    request: auth_schema.AccessToken, db: AsyncSession = Depends(get_db)
+):
+    return await get_current_user(db,request.access_token)

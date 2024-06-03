@@ -3,7 +3,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from api.models.auth import Base
+from backend.api.models.models import Base
 
 DB_URL = "mysql+pymysql://root@db:3306/data?charset=utf8"
 engine = create_engine(DB_URL, echo=True)
