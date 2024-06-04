@@ -13,11 +13,9 @@ import {
     Heading,
 } from '@chakra-ui/react'
 
-const PostIndex = () => {
-    const [post, setPost] = useState([]);
-
-    useEffect(() => {
-        const fetchPosts = async () => {
+    const PostIndex = () => {
+        const [post, setPost] = useState([]);
+    const fetchPost = async () => {
             try {
                 const res = await fetch("http://localhost:8000/post", {
                     method: "GET",
@@ -32,10 +30,11 @@ const PostIndex = () => {
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
-        };
-
-        fetchPosts();
-    }, []);
+        }
+    
+        useEffect(() => {
+            fetchPost();
+        },[])
 
     return (
         <>

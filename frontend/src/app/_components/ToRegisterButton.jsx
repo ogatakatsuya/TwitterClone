@@ -3,12 +3,12 @@ import { useRouter } from 'next/navigation'
 
 const ToRegisterButton = () => {
     const router = useRouter();
-    const onClick = () => {
+    const redirectToRegisterPage = () => {
         router.push("/auth/register");
     }
     return (
         <>
-            <Button onClick={onClick}>サインアップ</Button>
+            <Button onClick={redirectToRegisterPage}>サインアップ</Button>
         </>
     )
 }

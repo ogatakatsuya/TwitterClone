@@ -3,12 +3,12 @@ import { useRouter } from 'next/navigation'
 
 const ToLoginButton = () => {
     const router = useRouter();
-    const onClick = () => {
+    const redirectToLoginPage = () => {
         router.push("/auth/login");
     }
     return (
         <>
-            <Button onClick={onClick}>ログイン</Button>
+            <Button onClick={redirectToLoginPage}>ログイン</Button>
         </>
     )
 }
