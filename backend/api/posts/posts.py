@@ -13,7 +13,6 @@ async def create_post(db: AsyncSession, post_create: post_schema.CreatePosts, us
     post = Post(text=post_data['text'], user_id=user_id)
     db.add(post)
     await db.commit()
-    await db.refresh(post)
     return post
 
 async def get_post(db: AsyncSession):
