@@ -54,7 +54,7 @@ const PostIndex = () => {
         <>
         <Stack divider={<StackDivider />} spacing='4'>
             {post.map((item) => (
-                <Card width="500px">
+                <Card width="500px" key={item.id}>
                     <CardBody>
                         <Flex alignItems="center">
                             <Avatar />

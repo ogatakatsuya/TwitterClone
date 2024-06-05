@@ -3,4 +3,6 @@ from pydantic import BaseModel, Field
 
 class Posts(BaseModel):
     text: str
-    user_id: int
+    
+class CreatePosts(Posts):
+    access_token: str

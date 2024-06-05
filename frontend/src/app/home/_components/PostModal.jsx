@@ -31,6 +31,32 @@ export default function PostModal({ isOpen, onOpen, onClose }) {
   } = useForm()
 
   const [submitError, setSubmitError] = useState(null)
+  const submitPost = async (value) => {
+    try {
+      const res = await fetch("http://localhost:8000/post", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: value.text }),
+      });
+  
+      if (!res.ok) {
+        const data = await res.json();
+        console.log(data);
+        throw new Error('サーバーエラーです。後で再試行してください。');
+      }
+  
+      const data = await res.json();
+      console.log(data.message);
+  
+    } catch (err) {
+      setSubmitError('ネットワークエラーです。後で再試行してください。');
+      console.error('ネットワークエラー:', err);
+    }
+  };
+  
 
   return (
     <>
@@ -40,7 +66,7 @@ export default function PostModal({ isOpen, onOpen, onClose }) {
           <ModalHeader>投稿する</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form >
+            <form onSubmit={handleSubmit(submitPost)}>
               <FormControl isInvalid={!!errors.text}>
                 <FormLabel>テキスト：</FormLabel>
                 <Textarea
@@ -56,7 +82,12 @@ export default function PostModal({ isOpen, onOpen, onClose }) {
                 </Text>
               )}
               <Flex justify="flex-end" mt={4}>
-                <Button size="lg" colorScheme="green" type="submit" isLoading={isSubmitting}>
+                <Button 
+                  size="lg" 
+                  colorScheme="green" 
+                  type="submit" 
+                  isLoading={isSubmitting}
+                >
                   投稿する
                 </Button>
               </Flex>

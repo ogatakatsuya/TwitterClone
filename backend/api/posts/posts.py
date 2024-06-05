@@ -6,12 +6,14 @@ from fastapi import HTTPException
 import api.schemes.posts as post_schema
 from api.models.models import Post
 
-async def create_post(db: AsyncSession, post_create: post_schema.Posts) -> post_schema.Posts:
+from api.auth.user import get_current_user_id
+
+async def create_post(db: AsyncSession, post_create: post_schema.CreatePosts, user_id: int):
     post_data = post_create.dict()
-    
-    post = Post(**post_data)
+    post = Post(text=post_data['text'], user_id=user_id)
     db.add(post)
     await db.commit()
+    await db.refresh(post)
     return post
 
 async def get_post(db: AsyncSession):

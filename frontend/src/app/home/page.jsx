@@ -6,7 +6,7 @@ import PostButton from "./_components/PostButton";
 const Home = () => {
     return (
         <Container maxW="1000px" mt="10" centerContent>
-            <Grid templateColumns="200px 500px 200px" gap={50} padding={4}>
+            <Grid templateColumns="200px 500px 200px" gap={10} padding={4}>
                 <VStack align="start" spacing={4}>
                     <Heading as="h2" size="md">Menu</Heading>
                     <Button variant="link">Home</Button>

@@ -22,7 +22,7 @@ class Token(BaseModel):
 
 # トークンに含まれるデータモデル
 class TokenData(BaseModel):
-    username: Union[str, None] = None
+    user_id: Union[int, None] = None
     
 class AccessToken(BaseModel):
     access_token: str
