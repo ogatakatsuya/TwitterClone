@@ -20,9 +20,8 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
-import React from 'react'
 
-export default function SubmitMordal({ isOpen, onOpen, onClose }) {
+export default function PostModal({ isOpen, onOpen, onClose }) {
   const [text, setText] = useState('')
 
   const {
