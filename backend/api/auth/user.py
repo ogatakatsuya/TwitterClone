@@ -14,7 +14,7 @@ import api.models.models as auth_model
 import api.schemes.auth as auth_schema
 from api.models.models import User, Password
 
-SECRET_KEY = "your_secret_key"
+SECRET_KEY = secrets.token_hex(32)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
