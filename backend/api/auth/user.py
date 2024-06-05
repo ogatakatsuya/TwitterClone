@@ -72,27 +72,6 @@ async def get_current_user_id(db: AsyncSession, token: str) -> int:
     except JWTError:
         raise credentials_exception
     return user_id
-# def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
-#     to_encode = data.copy()
-#     if expires_delta:
-#         expire = datetime.now(timezone.utc) + expires_delta
-#     else:
-#         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-#     to_encode.update({"exp": expire})
-#     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-#     return encoded_jwt
-
-# async def get_current_user_id(db: AsyncSession, token: str) -> int:
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"},
-#     )
-#     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#     user_id: str = payload.get("sub")
-#     if user_id is None:
-#         raise credentials_exception
-#     return user_id
 
 async def create_user(db: AsyncSession, user_create: auth_schema.UserCreate) -> auth_model.User:
     user = auth_model.User(
