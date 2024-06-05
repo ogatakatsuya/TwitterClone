@@ -1,12 +1,16 @@
 import { Heading } from "@chakra-ui/react"
 
-import LogoutButton from "./components/LogoutButton"
+import LogoutButton from "./_components/LogoutButton"
+import PostIndex from "./_components/PostIndex"
+import PostButton from "./_components/PostButton"
+
 
 const Home = () => {
     return(
         <>
-        <Heading>ログインに成功しました！</Heading>
-        <LogoutButton />
+            <PostIndex />
+            <LogoutButton />
+            <PostButton />
         </>
     )
 }

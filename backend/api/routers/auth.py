@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,8 +23,8 @@ async def register_new_account(
 
 @router.post("/auth/login")
 async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)
-) -> auth_schema.Token:
+    response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)
+):
     user = await authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -36,4 +36,12 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user.id}, expires_delta=access_token_expires
     )
-    return auth_schema.Token(access_token=access_token, token_type="bearer")
+    response.set_cookie(key="access_token", value=access_token, httponly=True, path="/")
+    return {"message": "Successfuly login"}
+
+@router.delete("/auth/logout")
+async def logout_user(
+    response: Response
+):
+    response.delete_cookie(key="access_token", path="/")
+    return {"message": "Successfully log out"}
