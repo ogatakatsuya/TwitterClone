@@ -1,8 +1,8 @@
 from typing import Optional, Union
 from pydantic import BaseModel, Field
 
-class Posts(BaseModel):
+class Post(BaseModel):
     text: str
     
-class CreatePosts(Posts):
-    access_token: str
+class CreatePost(Post):
+    user_id: int

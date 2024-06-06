@@ -61,7 +61,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 async def get_current_user_id(db: AsyncSession, token: str = Depends(oauth2_scheme)) -> int:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="タイムアウトしました．再度ログインしてください．",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:

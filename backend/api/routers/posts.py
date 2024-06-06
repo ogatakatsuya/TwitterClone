@@ -1,8 +1,4 @@
 from fastapi import Depends, APIRouter, HTTPException, Cookie
-from sqlalchemy.exc import SQLAlchemyError
-from jose import JWTError
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from datetime import datetime, timedelta, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.auth.user as auth_cruds
@@ -17,16 +13,17 @@ router = APIRouter()
 
 @router.post("/post")
 async def create_post(
-    post: post_schema.Posts, db: AsyncSession = Depends(get_db),access_token: str | None = Cookie(default=None)
+    post: post_schema.Post, db: AsyncSession = Depends(get_db), access_token: str | None = Cookie(default=None)
 ):
     if not access_token:
-        raise HTTPException(status_code=401, detail="アクセストークンが見つかりません")
+        raise HTTPException(status_code=401, detail="アクセストークンが見つかりません．再度ログインしてください．")
 
     user_id = await get_current_user_id(db, access_token)
-    post_body = post_schema.CreatePosts(text=post.text, access_token=access_token)
-    new_post = await post_cruds.create_post(db, post_body, user_id)
-    
-    return {"message":"successfully posted."}
+
+    post_body = post_schema.CreatePost(text=post.text, user_id=user_id)
+    new_post = await post_cruds.create_post(db, post_body)
+
+    return {"message": "successfully posted."}
 
 @router.get("/post")
 async def get_post(

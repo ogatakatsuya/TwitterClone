@@ -32,29 +32,24 @@ export default function PostModal({ isOpen, onOpen, onClose }) {
 
   const [submitError, setSubmitError] = useState(null)
   const submitPost = async (value) => {
-    try {
-      const endpointUrl= await process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
-      const res = await fetch(`${endpointUrl}/post`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: value.text }),
-      });
-  
-      if (!res.ok) {
-        const data = await res.json();
-        console.log(data);
-        throw new Error('サーバーエラーです。後で再試行してください。');
-      }
+    const endpointUrl= await process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+    const res = await fetch(`${endpointUrl}/post`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: value.text }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      console.log(data)
+      setSubmitError(data.detail);
+    } else {
       onClose();
       const data = await res.json();
       console.log(data.message);
-  
-    } catch (err) {
-      setSubmitError('ネットワークエラーです。後で再試行してください。');
-      console.error('ネットワークエラー:', err);
     }
   };
   
