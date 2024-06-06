@@ -13,7 +13,9 @@ const ToLoginButton = () => {
             <Button 
                 onClick={redirectToLoginPage}
                 colorScheme="teal"
-            >ログイン</Button>
+            >
+                ログイン
+            </Button>
         </>
     )
 }

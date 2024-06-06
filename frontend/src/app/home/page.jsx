@@ -6,7 +6,7 @@ import PostButton from "./_components/PostButton";
 import MenuBar from "./_components/MenuBar"
 
 const Home = () => {
-    const access_token = cookies().get("access_token");
+    const access_token = cookies().has("access_token");
     return (
         <Container maxW="1000px" mt="10" centerContent>
             <Grid templateColumns="200px 500px 200px" gap={10} padding={4}>

@@ -13,7 +13,9 @@ const ToRegisterButton = () => {
             <Button 
                 onClick={redirectToRegisterPage}
                 colorScheme="teal"
-            >サインアップ</Button>
+            >
+                サインアップ
+            </Button>
         </>
     )
 }

@@ -10,7 +10,7 @@ import ToRegisterButton from "../../_components/ToRegisterButton";
 import LogoutButton from "./LogoutButton";
 
 const MenuBar = () => {
-    const access_token = cookies().get("access_token");
+    const access_token = cookies().has("access_token");
     return (
         <>
             {access_token ? 
