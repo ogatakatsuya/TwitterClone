@@ -8,7 +8,8 @@ const LogoutButton = () => {
 
     const onClick = async () => {
         try{
-            const res = await fetch("http://localhost:8000/auth/logout", {
+            const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+            const res = await fetch(`${endpointUrl}/auth/logout`, {
                 method: "DELETE",
                 credentials: "include"
             });

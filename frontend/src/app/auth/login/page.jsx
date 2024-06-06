@@ -31,7 +31,8 @@ const Login = () => {
 
     const onSubmit = async (value) => {
         try {
-            const res = await fetch('http://localhost:8000/auth/login', {
+            const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+            const res = await fetch(`${endpointUrl}/auth/login`, {
                 method: 'POST',
                 credentials: "include",
                 headers: {

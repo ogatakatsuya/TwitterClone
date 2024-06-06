@@ -47,6 +47,10 @@ return (
                 <Textarea
                 {...register('text', {
                     required: 'テキストを入力してください．',
+                    maxLength:{
+                        value: 100,
+                        message: "コメントは200文字以下で入力してください．"
+                    },
                 })}
                 />
                 <FormErrorMessage>{errors.text && errors.text.message}</FormErrorMessage>

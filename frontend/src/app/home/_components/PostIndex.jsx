@@ -27,7 +27,8 @@ const PostIndex = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const fetchPost = async () => {
         try {
-            const res = await fetch("http://localhost:8000/post", {
+            const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+            const res = await fetch(`${endpointUrl}/post`, {
                 method: "GET",
             });
             if (res.ok) {

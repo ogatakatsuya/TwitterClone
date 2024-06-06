@@ -33,7 +33,8 @@ export default function PostModal({ isOpen, onOpen, onClose }) {
   const [submitError, setSubmitError] = useState(null)
   const submitPost = async (value) => {
     try {
-      const res = await fetch("http://localhost:8000/post", {
+      const endpointUrl= await process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+      const res = await fetch(`${endpointUrl}/post`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -47,7 +48,7 @@ export default function PostModal({ isOpen, onOpen, onClose }) {
         console.log(data);
         throw new Error('サーバーエラーです。後で再試行してください。');
       }
-  
+      onClose();
       const data = await res.json();
       console.log(data.message);
   
@@ -72,6 +73,10 @@ export default function PostModal({ isOpen, onOpen, onClose }) {
                 <Textarea
                   {...register('text', {
                     required: 'テキストを入力してください．',
+                    maxLength:{
+                      value: 200,
+                      message: "投稿は200文字以下で入力してください．"
+                    },
                   })}
                 />
                 <FormErrorMessage>{errors.text && errors.text.message}</FormErrorMessage>

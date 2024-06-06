@@ -36,14 +36,14 @@ const Register = () => {
 
     const onSubmit = async (value) => {
         try {
-        const res = await fetch('http://localhost:8000/auth/register', {
-            // ポート番号を修正
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ user_name : value.email, password : value.password }),
-        })
+            const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+            const res = await fetch(`${endpointUrl}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_name : value.email, password : value.password }),
+            })
     
         if (!res.ok) {
             const errorData = await res.json()
