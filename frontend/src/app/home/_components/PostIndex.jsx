@@ -90,23 +90,6 @@ const PostIndex = () => {
                                 />
                             </Flex>
                         </CardBody>
-                        {/* <CardFooter>
-                            <Flex>
-                                <IconButton 
-                                    icon={pushed ? <BiSolidLike /> : <BiLike />} 
-                                    onClick={() => handleLike()}
-                                    aria-label="Like button"
-                                    mr="4"
-                                    size="sm"
-                                />
-                                <IconButton 
-                                    icon={<FaRegCommentDots/>}
-                                    aria-label="Comment Button"
-                                    onClick={onOpen}
-                                    size="sm"
-                                />
-                            </Flex>
-                        </CardFooter> */}
                     </Card>
                 ))}
             </Stack>

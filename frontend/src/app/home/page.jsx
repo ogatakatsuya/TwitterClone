@@ -1,23 +1,19 @@
-import { Box, Flex, Grid, Heading, Input, Button, VStack, Container } from "@chakra-ui/react";
-import LogoutButton from "./_components/LogoutButton";
+import { cookies } from "next/headers";
+
+import { Flex, Grid, Heading, Input, VStack, Container } from "@chakra-ui/react";
 import PostIndex from "./_components/PostIndex";
 import PostButton from "./_components/PostButton";
+import MenuBar from "./_components/MenuBar"
 
 const Home = () => {
+    const access_token = cookies().get("access_token");
     return (
         <Container maxW="1000px" mt="10" centerContent>
             <Grid templateColumns="200px 500px 200px" gap={10} padding={4}>
-                <VStack align="start" spacing={4}>
-                    <Heading as="h2" size="md">Menu</Heading>
-                    <Button variant="link">Home</Button>
-                    <Button variant="link">Explore</Button>
-                    <Button variant="link">Profile</Button>
-                    <LogoutButton />
-                </VStack>
-
+                <MenuBar />
                 <Flex direction="column" align="center">
                     <PostIndex />
-                    <PostButton />
+                    { access_token && <PostButton />}
                 </Flex>
 
                 <VStack align="start" spacing={4} width="100%">

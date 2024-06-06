@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect, useState } from 'react'
+"use client";
+
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, useDisclosure } from '@chakra-ui/react'
 import PostModal from './PostModal'
