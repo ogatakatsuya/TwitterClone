@@ -1,8 +1,8 @@
-"use client"
-import React, { useEffect, useState } from 'react'
+"use client";
+
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, useDisclosure } from '@chakra-ui/react'
-import SubmitMordal from './SubmitMordal'
+import PostModal from './PostModal'
 
 export default function PostButton() {
 
@@ -34,7 +34,7 @@ export default function PostButton() {
           <AddIcon />
         </Button>
       </Box>
-      <SubmitMordal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <PostModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
   )
 }

@@ -20,9 +20,8 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
-import React from 'react'
 
-export default function SubmitMordal({ isOpen, onOpen, onClose }) {
+export default function PostModal({ isOpen, onOpen, onClose }) {
   const [text, setText] = useState('')
 
   const {
@@ -32,6 +31,28 @@ export default function SubmitMordal({ isOpen, onOpen, onClose }) {
   } = useForm()
 
   const [submitError, setSubmitError] = useState(null)
+  const submitPost = async (value) => {
+    const endpointUrl= await process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+    const res = await fetch(`${endpointUrl}/post`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: value.text }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      console.log(data)
+      setSubmitError(data.detail);
+    } else {
+      onClose();
+      const data = await res.json();
+      console.log(data.message);
+    }
+  };
+  
 
   return (
     <>
@@ -41,12 +62,16 @@ export default function SubmitMordal({ isOpen, onOpen, onClose }) {
           <ModalHeader>投稿する</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form >
+            <form onSubmit={handleSubmit(submitPost)}>
               <FormControl isInvalid={!!errors.text}>
                 <FormLabel>テキスト：</FormLabel>
                 <Textarea
                   {...register('text', {
                     required: 'テキストを入力してください．',
+                    maxLength:{
+                      value: 200,
+                      message: "投稿は200文字以下で入力してください．"
+                    },
                   })}
                 />
                 <FormErrorMessage>{errors.text && errors.text.message}</FormErrorMessage>
@@ -57,7 +82,12 @@ export default function SubmitMordal({ isOpen, onOpen, onClose }) {
                 </Text>
               )}
               <Flex justify="flex-end" mt={4}>
-                <Button size="lg" colorScheme="green" type="submit" isLoading={isSubmitting}>
+                <Button 
+                  size="lg" 
+                  colorScheme="green" 
+                  type="submit" 
+                  isLoading={isSubmitting}
+                >
                   投稿する
                 </Button>
               </Flex>

@@ -1,11 +1,10 @@
-from fastapi import Depends, APIRouter, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from datetime import datetime, timedelta, timezone
+from fastapi import Depends, APIRouter, HTTPException, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.auth.user as auth_cruds
 import api.posts.posts as post_cruds
 from api.db import get_db
+from api.auth.user import get_current_user_id
 
 from typing import List
 import api.schemes.posts as post_schema
@@ -14,9 +13,17 @@ router = APIRouter()
 
 @router.post("/post")
 async def create_post(
-    post: post_schema.Posts, db: AsyncSession = Depends(get_db)
+    post: post_schema.Post, db: AsyncSession = Depends(get_db), access_token: str | None = Cookie(default=None)
 ):
-    return await post_cruds.create_post(db, post)
+    if not access_token:
+        raise HTTPException(status_code=401, detail="アクセストークンが見つかりません．再度ログインしてください．")
+
+    user_id = await get_current_user_id(db, access_token)
+
+    post_body = post_schema.CreatePost(text=post.text, user_id=user_id)
+    new_post = await post_cruds.create_post(db, post_body)
+
+    return {"message": "successfully posted."}
 
 @router.get("/post")
 async def get_post(
