@@ -22,14 +22,18 @@ async def create_post(
 
     post_body = post_schema.CreatePost(text=post.text, user_id=user_id)
     new_post = await post_cruds.create_post(db, post_body)
-
-    return {"message": "successfully posted."}
+    
+    if new_post :
+        await db.commit()
+        return {"message": "successfully posted."}
+    else:
+        return {"message": "something went wrong, please retry"}
 
 @router.get("/post")
 async def get_post(
     db: AsyncSession = Depends(get_db)
 ):
-    success = await post_cruds.get_post(db)
+    success = await post_cruds.get_posts(db)
     if not success:
         raise HTTPException(status_code=404, detail="Post not found")
     return success
@@ -39,6 +43,8 @@ async def delete_post(
     post_id: int, db: AsyncSession = Depends(get_db)
 ):
     success = await post_cruds.delete_post(db, post_id)
-    if not success:
+    if success:
+        await db.commit()
+        return {"detail": "Post deleted"}
+    else:
         raise HTTPException(status_code=404, detail="Post not found")
-    return {"detail": "Post deleted"}
