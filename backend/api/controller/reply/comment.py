@@ -9,17 +9,18 @@ async def create_reply(db: AsyncSession, post_body: CreateReply):
     db.add(new_reply)
     return new_reply
 
-async def get_reply_by_parent_id(db: AsyncSession, parent_id: int):
-    result = await db.execute(select(Post).where(Post.parent_id == parent_id))
-    posts = result.scalars().all()
-    return posts
+async def get_post(db: AsyncSession):
+    result = await db.execute(select(Post))
+    all_posts = result.scalars().all()
+    return all_posts
 
-async def remove_reply(db: AsyncSession, reply_id: int):
-    result = await db.execute(select(Post).filter_by(id=reply_id))
-    reply = result.scalar_one_or_none()
+async def delete_post(db: AsyncSession, post_id: int):
+    result = await db.execute(select(Post).filter_by(id=post_id))
+    post = result.scalar_one_or_none()
     
-    if reply is None:
+    if post is None:
         return False
     
-    await db.delete(reply)
+    await db.delete(post)
+    await db.commit()
     return True
