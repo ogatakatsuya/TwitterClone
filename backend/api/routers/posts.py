@@ -1,10 +1,10 @@
 from fastapi import Depends, APIRouter, HTTPException, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import api.controller.auth.user as auth_cruds
-import api.controller.posts.posts as post_cruds
+import api.services.auth.user as auth_cruds
+import api.services.posts.posts as post_cruds
 from api.db import get_db
-from api.controller.auth.user import get_current_user_id
+from api.services.auth.user import get_current_user_id
 
 from typing import List
 import api.schemes.posts as post_schema
