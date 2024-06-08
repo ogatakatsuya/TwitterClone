@@ -19,9 +19,9 @@ async def post_reply(
 ):
     user_id = await get_current_user_id(db, access_token)
     new_reply = CreateReply(text=reply_body.text, user_id=user_id, parent_id=parent_id)
-    is_success = await create_reply(db, new_reply)
+    success = await create_reply(db, new_reply)
     
-    if is_success :
+    if success :
         await db.commit()
         return {"message": "Successfully created reply."}
     else:

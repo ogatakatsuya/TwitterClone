@@ -18,6 +18,15 @@ async def get_posts(db: AsyncSession):
     top_level_posts = result.scalars().all()
     return top_level_posts
 
+async def get_posts_by_use_id(db: AsyncSession, user_id: int):
+    result = await db.execute(
+        select(Post)
+        .where(Post.user_id == user_id)
+        .where(Post.parent_id == None)
+    )
+    posts = result.scalars().all()
+    return posts
+
 async def delete_post(db: AsyncSession, post_id: int):
     result = await db.execute(select(Post).filter_by(id=post_id))
     post = result.scalar_one_or_none()
