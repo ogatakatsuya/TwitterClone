@@ -21,13 +21,9 @@ async def post_reply(
 ) -> Dict[str, str]:
     user_id = await get_current_user_id(db, access_token)
     new_reply = CreatePost(text=reply_body.text, user_id=user_id, parent_id=parent_id)
-    is_success = await create_reply(db, new_reply)
-    
-    if is_success:
-        await db.commit()
-        return {"message": "Successfully created reply."}
-    else:
-        return {"message": "Something went wrong, please retry."}
+    await create_reply(db, new_reply)
+    await db.commit()
+    return {"message": "Successfully created reply."}
 
 @router.delete("/reply/{reply_id}", response_model=Dict[str, str])
 async def delete_reply(reply_id: int, db: AsyncSession = Depends(get_db)) -> Dict[str, str]:
