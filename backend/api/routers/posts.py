@@ -21,22 +21,16 @@ async def create_post(
     user_id = await get_current_user_id(db, access_token)
 
     post_body = post_schema.CreatePost(text=post.text, user_id=user_id)
-    new_post = await post_cruds.create_post(db, post_body)
-    
-    if new_post :
-        await db.commit()
-        return {"message": "successfully posted."}
-    else:
-        return {"message": "something went wrong, please retry"}
+    await post_cruds.create_post(db, post_body)
+    await db.commit()
+    return {"message": "successfully posted."}
 
 @router.get("/post")
 async def get_post(
     db: AsyncSession = Depends(get_db)
 ):
-    success = await post_cruds.get_posts(db)
-    if not success:
-        raise HTTPException(status_code=404, detail="Post not found")
-    return success
+    posts= await post_cruds.get_posts(db)
+    return posts
 
 @router.delete("/post/{post_id}")
 async def delete_post(

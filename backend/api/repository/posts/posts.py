@@ -7,6 +7,7 @@ from api.models.models import Post
 async def create_post(db: AsyncSession, post_body: post_schema.CreatePost):
     post = Post(text=post_body.text, user_id=post_body.user_id)
     db.add(post)
+    await db.flush()
     return post
 
 async def get_posts(db: AsyncSession):

@@ -3,14 +3,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.schemes.reply import Reply, CreateReply
 from api.repository.auth.user import get_current_user_id
-from api.repository.reply.reply import create_reply, get_reply_by_parent_id, remove_reply
+from api.repository.reply.reply import create_reply, get_replies_by_parent_id, remove_reply
 from api.db import get_db
 
 router = APIRouter()
 
-@router.get("/reply/{parent_id}")
+@router.get("/replies/{parent_id}")
 async def get_replies(parent_id: int, db: AsyncSession = Depends(get_db)):
-    replies = await get_reply_by_parent_id(db, parent_id)
+    replies = await get_replies_by_parent_id(db, parent_id)
     return replies
 
 @router.post("/reply/{parent_id}")
