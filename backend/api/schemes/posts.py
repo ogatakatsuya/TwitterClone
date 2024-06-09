@@ -6,3 +6,4 @@ class Post(BaseModel):
     
 class CreatePost(Post):
     user_id: int
+    parent_id: int = Field(None)

@@ -7,13 +7,16 @@ from api.models.models import Post
 async def create_post(db: AsyncSession, post_body: post_schema.CreatePost):
     post = Post(text=post_body.text, user_id=post_body.user_id)
     db.add(post)
+    await db.flush()
     return post
 
 async def get_posts(db: AsyncSession):
     result = await db.execute(
         select(Post)
         .where(Post.parent_id == None)
+        .order_by(Post.id.desc())
         .limit(10)
+        .offset(0)
     )
     top_level_posts = result.scalars().all()
     return top_level_posts

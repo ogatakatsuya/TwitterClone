@@ -1,15 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from api.schemes.reply import CreateReply
+from api.schemes.posts import CreatePost
 from api.models.models import Post
 
-async def create_reply(db: AsyncSession, post_body: CreateReply):
+async def create_reply(db: AsyncSession, post_body: CreatePost):
     new_reply = Post(text=post_body.text, user_id=post_body.user_id, parent_id=post_body.parent_id)
     db.add(new_reply)
     return new_reply
 
-async def get_reply_by_parent_id(db: AsyncSession, parent_id: int):
+async def get_replies_by_parent_id(db: AsyncSession, parent_id: int):
     result = await db.execute(select(Post).where(Post.parent_id == parent_id))
     posts = result.scalars().all()
     return posts
