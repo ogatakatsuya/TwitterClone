@@ -2,8 +2,8 @@ from fastapi import APIRouter, Cookie, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.schemes.reply import Reply, CreateReply
-from api.services.auth.user import get_current_user_id
-from api.services.reply.reply import create_reply, get_reply_by_parent_id, remove_reply
+from api.repository.auth.user import get_current_user_id
+from api.repository.reply.reply import create_reply, get_reply_by_parent_id, remove_reply
 from api.db import get_db
 
 router = APIRouter()
