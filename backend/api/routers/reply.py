@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Cookie, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.schemes.reply import Reply, CreateReply
+from api.schemes.posts import Post, CreatePost
 from api.repository.auth.user import get_current_user_id
 from api.repository.reply.reply import create_reply, get_replies_by_parent_id, remove_reply
 from api.db import get_db
@@ -15,10 +15,10 @@ async def get_replies(parent_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.post("/reply/{parent_id}")
 async def post_reply(
-    parent_id: int, reply_body: Reply, db: AsyncSession = Depends(get_db), access_token: str | None = Cookie(default=None)
+    parent_id: int, reply_body: Post, db: AsyncSession = Depends(get_db), access_token: str | None = Cookie(default=None)
 ):
     user_id = await get_current_user_id(db, access_token)
-    new_reply = CreateReply(text=reply_body.text, user_id=user_id, parent_id=parent_id)
+    new_reply = CreatePost(text=reply_body.text, user_id=user_id, parent_id=parent_id)
     is_success = await create_reply(db, new_reply)
     
     if is_success :
