@@ -14,7 +14,9 @@ async def get_posts(db: AsyncSession):
     result = await db.execute(
         select(Post)
         .where(Post.parent_id == None)
+        .order_by(Post.id.desc())
         .limit(10)
+        .offset(0)
     )
     top_level_posts = result.scalars().all()
     return top_level_posts
