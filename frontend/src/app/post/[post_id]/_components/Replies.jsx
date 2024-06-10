@@ -11,12 +11,13 @@ import {
     Avatar,
     Flex,
     IconButton,
+    Stack,
+    StackDivider
 } from '@chakra-ui/react'
 import { MdExpandMore } from "react-icons/md";
 
 const Replies = ({ post_id }) => {
     const [ replies, setReplies ] = useState([]);
-    const [ pushed, setPushed ] = useState(false);
     
     const router = useRouter();
 
@@ -40,38 +41,42 @@ const Replies = ({ post_id }) => {
 
     return (
         <>
-        {replies.map((item) => (
-            <Card width="500px" key={item.id} mt="2">
-                    <CardBody>
-                        <Flex alignItems="center">
-                            <Avatar />
-                            <Box ml={3}>
-                                <Text fontSize='md'>
-                                    John Doe
+        <Box maxH="500px" overflowY="auto"> 
+            <Stack divider={<StackDivider />} spacing='4'>
+                {replies.map((item) => (
+                    <Card width="500px" key={item.id} mt="2">
+                            <CardBody>
+                                <Flex alignItems="center">
+                                    <Avatar />
+                                    <Box ml={3}>
+                                        <Text fontSize='md'>
+                                            John Doe
+                                        </Text>
+                                        <Text fontSize='xs'>
+                                            {item.created_at}
+                                        </Text>
+                                    </Box>
+                                </Flex>
+                                <Text mt='4' fontSize='md'>
+                                    {item.text}
                                 </Text>
-                                <Text fontSize='xs'>
-                                    {item.created_at}
-                                </Text>
-                            </Box>
-                        </Flex>
-                        <Text mt='4' fontSize='md'>
-                            {item.text}
-                        </Text>
-                        <Flex 
-                            justifyContent="flex-end" 
-                            alignItems="flex-end"
-                            style={{ position: 'absolute', bottom: '10px', right: '10px' }}
-                        >
-                            <IconButton 
-                                icon={<MdExpandMore/>}
-                                aria-label="Comment Button"
-                                onClick={() => redirectToDetail(item.id)}
-                                size="sm"
-                            />
-                        </Flex>
-                    </CardBody>
-            </Card>
-        ))}
+                                <Flex 
+                                    justifyContent="flex-end" 
+                                    alignItems="flex-end"
+                                    style={{ position: 'absolute', bottom: '10px', right: '10px' }}
+                                >
+                                    <IconButton 
+                                        icon={<MdExpandMore/>}
+                                        aria-label="Comment Button"
+                                        onClick={() => redirectToDetail(item.id)}
+                                        size="sm"
+                                    />
+                                </Flex>
+                            </CardBody>
+                    </Card>
+                ))}
+            </Stack>
+        </Box>
         </>
     )
 }
