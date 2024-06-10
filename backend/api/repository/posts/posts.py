@@ -5,7 +5,11 @@ from api.schemes.posts import CreatePost
 from api.models.models import Post
 
 async def create_post(db: AsyncSession, post_body: CreatePost):
-    post = Post(text=post_body.text, user_id=post_body.user_id)
+    post = Post(
+        text=post_body.text, 
+        user_id=post_body.user_id, 
+        parent_id=post_body.parent_id
+    )
     db.add(post)
     await db.flush()
     return post
