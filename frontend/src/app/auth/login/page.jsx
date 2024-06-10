@@ -36,10 +36,10 @@ const Login = () => {
                 method: 'POST',
                 credentials: "include",
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded', // Content-Typeを変更
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams({
-                    'username': value.email,
+                    'username': value.userName,
                     'password': value.password,
                 }),
             });
@@ -82,22 +82,17 @@ const Login = () => {
             Welcome back 🥰{" "}
             </Text>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl id="email" isRequired isInvalid={!!errors.email} pt={6}>
-                <FormLabel fontSize={"xl1"}>Email address</FormLabel>
+            <FormControl id="userName" isRequired isInvalid={!!errors.userName} pt={6}>
+                <FormLabel fontSize={"xl1"}>User name</FormLabel>
                 <Input
-                placeholder="sample@email.com"
+                placeholder="John Doe"
                 _placeholder={{ opacity: "0.3", color: "gray.500" }}
-                {...register("email", {
+                {...register("userName", {
                     required: "メールアドレスは必須です。",
-                    pattern: {
-                    value:
-                        /^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-                    message: "不適切なメールアドレスです。",
-                    },
                 })}
                 />
                 <FormErrorMessage>
-                {errors.email && errors.email.message}
+                {errors.userName && errors.userName.message}
                 </FormErrorMessage>
             </FormControl>
             <FormControl
