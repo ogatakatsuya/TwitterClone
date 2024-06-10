@@ -28,7 +28,7 @@ const PostIndex = () => {
     const fetchPost = async () => {
         try {
             const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
-            const res = await fetch(`${endpointUrl}/post`, {
+            const res = await fetch(`${endpointUrl}/posts`, {
                 method: "GET",
             });
             if (res.ok) {

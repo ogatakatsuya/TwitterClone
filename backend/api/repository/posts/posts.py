@@ -1,11 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-import api.schemes.posts as post_schema
+from api.schemes.posts import CreatePost
 from api.models.models import Post
 
-async def create_post(db: AsyncSession, post_body: post_schema.CreatePost):
-    post = Post(text=post_body.text, user_id=post_body.user_id)
+async def create_post(db: AsyncSession, post_body: CreatePost):
+    post = Post(
+        text=post_body.text, 
+        user_id=post_body.user_id, 
+        parent_id=post_body.parent_id
+    )
     db.add(post)
     await db.flush()
     return post
@@ -20,6 +24,23 @@ async def get_posts(db: AsyncSession):
     )
     top_level_posts = result.scalars().all()
     return top_level_posts
+
+async def get_posts_by_parent_id(db: AsyncSession, parent_id: int):
+    result = await db.execute(
+        select(Post)
+        .where(Post.parent_id == parent_id)
+    )
+    posts = result.scalars().all()
+    return posts
+
+async def get_posts_by_user_id(db: AsyncSession, user_id: int):
+    result = await db.execute(
+        select(Post)
+        .where(Post.user_id == user_id)
+        .where(Post.parent_id == None)
+    )
+    posts = result.scalars().all()
+    return posts
 
 async def delete_post(db: AsyncSession, post_id: int):
     result = await db.execute(select(Post).filter_by(id=post_id))

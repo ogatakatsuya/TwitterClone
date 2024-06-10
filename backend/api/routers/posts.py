@@ -1,7 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import api.repository.auth.user as auth_cruds
 import api.repository.posts.posts as post_cruds
 from api.db import get_db
 from api.repository.auth.user import get_current_user_id
@@ -25,8 +24,8 @@ async def create_post(
     await db.commit()
     return {"message": "successfully posted."}
 
-@router.get("/post")
-async def get_post(
+@router.get("/posts")
+async def get_posts(
     db: AsyncSession = Depends(get_db)
 ):
     posts= await post_cruds.get_posts(db)
