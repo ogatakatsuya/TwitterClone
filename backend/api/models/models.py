@@ -19,6 +19,7 @@ class User(Base):
     
     posts = relationship("Post", back_populates="user")
     password = relationship("Password", back_populates="user", uselist=False)
+    likes = relationship("Likes", back_populates="user")
     
 class Password(Base):
     __tablename__ = "passwords"
@@ -40,3 +41,14 @@ class Post(Base):
 
     user_id = Column(Integer, ForeignKey('users.id', name="fk_posts_users"), nullable=False)
     user = relationship("User", back_populates="posts")
+    likes = relationship("Likes", back_populates="post")
+    
+class Likes(Base):
+    __tablename__ = "likes"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('users.id', name="fk_likes_users"), nullable=False)
+    post_id = Column(Integer, ForeignKey('posts.id', name="fk_likes_posts"), nullable=False)
+    
+    user = relationship("User", back_populates="likes")
+    post = relationship("Posts", back_populates="likes")
