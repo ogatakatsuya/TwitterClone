@@ -18,6 +18,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import { MdExpandMore } from "react-icons/md";
+import PostButton from "./PostButton";
 
 const PostIndex = () => {
     const router = useRouter();
@@ -88,6 +89,7 @@ const PostIndex = () => {
                 ))}
             </Stack>
         </Box>
+        <PostButton setPost={setPost}/>
         </>
     )
 }
