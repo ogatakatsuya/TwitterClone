@@ -10,7 +10,7 @@ from api.db import get_db
 
 router = APIRouter()
 
-@router.get("/replies/{parent_id}", response_model=List[Post])
+@router.get("/replies/{parent_id}")
 async def get_replies(parent_id: int, db: AsyncSession = Depends(get_db)):
     replies = await get_posts_by_parent_id(db, parent_id)
     return replies

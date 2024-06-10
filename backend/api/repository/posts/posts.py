@@ -14,13 +14,21 @@ async def create_post(db: AsyncSession, post_body: CreatePost):
     await db.flush()
     return post
 
-async def get_posts(db: AsyncSession):
+async def get_post(db: AsyncSession, post_id: int):
+    result = await db.execute(
+        select(Post)
+        .where(Post.id == post_id)
+    )
+    post = result.scalar_one_or_none()
+    return post
+
+async def get_posts(db: AsyncSession, offset: int):
     result = await db.execute(
         select(Post)
         .where(Post.parent_id == None)
         .order_by(Post.id.desc())
         .limit(10)
-        .offset(0)
+        .offset(offset)
     )
     top_level_posts = result.scalars().all()
     return top_level_posts

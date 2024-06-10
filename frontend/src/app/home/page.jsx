@@ -4,6 +4,7 @@ import { Flex, Grid, Heading, Input, VStack, Container } from "@chakra-ui/react"
 import PostIndex from "./_components/PostIndex";
 import PostButton from "./_components/PostButton";
 import MenuBar from "./_components/MenuBar"
+import SearchBar from "./_components/SearchBar"
 
 const Home = () => {
     const access_token = cookies().has("access_token");
@@ -15,11 +16,7 @@ const Home = () => {
                     <PostIndex />
                     { access_token && <PostButton />}
                 </Flex>
-
-                <VStack align="start" spacing={4} width="100%">
-                    <Heading as="h2" size="md">Search</Heading>
-                    <Input placeholder="Search posts..." width="100%" />
-                </VStack> 
+                <SearchBar />
             </Grid>
         </Container>
     );

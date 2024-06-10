@@ -1,0 +1,79 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { 
+    Card,
+    CardBody,
+    Text,
+    Box,
+    Avatar,
+    Flex,
+    IconButton,
+} from '@chakra-ui/react'
+import { MdExpandMore } from "react-icons/md";
+
+const Replies = ({ post_id }) => {
+    const [ replies, setReplies ] = useState([]);
+    const [ pushed, setPushed ] = useState(false);
+    
+    const router = useRouter();
+
+    const fetchReplies = async () => {
+        const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+        const res = await fetch(`${endpointUrl}/replies/${post_id}`)
+        if(res.ok){
+            const data = await res.json();
+            console.log(data)
+            setReplies(data);
+        }
+    }
+
+    useEffect(() => {
+        fetchReplies()
+    }, [])
+
+    const redirectToDetail = (post_id) => {
+        router.push(`/post/${post_id}`);
+    }
+
+    return (
+        <>
+        {replies.map((item) => (
+            <Card width="500px" key={item.id} mt="2">
+                    <CardBody>
+                        <Flex alignItems="center">
+                            <Avatar />
+                            <Box ml={3}>
+                                <Text fontSize='md'>
+                                    John Doe
+                                </Text>
+                                <Text fontSize='xs'>
+                                    {item.created_at}
+                                </Text>
+                            </Box>
+                        </Flex>
+                        <Text mt='4' fontSize='md'>
+                            {item.text}
+                        </Text>
+                        <Flex 
+                            justifyContent="flex-end" 
+                            alignItems="flex-end"
+                            style={{ position: 'absolute', bottom: '10px', right: '10px' }}
+                        >
+                            <IconButton 
+                                icon={<MdExpandMore/>}
+                                aria-label="Comment Button"
+                                onClick={() => redirectToDetail(item.id)}
+                                size="sm"
+                            />
+                        </Flex>
+                    </CardBody>
+            </Card>
+        ))}
+        </>
+    )
+}
+
+export default Replies;
