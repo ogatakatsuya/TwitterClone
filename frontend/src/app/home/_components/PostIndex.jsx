@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation";
 import { 
     Card, 
     CardHeader, 
@@ -16,19 +17,15 @@ import {
     IconButton,
     useDisclosure,
 } from '@chakra-ui/react'
-import CommentModal from "./CommentModal"
-import { BiLike } from "react-icons/bi";
-import { BiSolidLike } from "react-icons/bi";
-import { FaRegCommentDots } from "react-icons/fa";
+import { MdExpandMore } from "react-icons/md";
 
 const PostIndex = () => {
+    const router = useRouter();
     const [post, setPost] = useState([]);
-    const [pushed, setPushed] = useState(false);
-    const { isOpen, onOpen, onClose } = useDisclosure()
     const fetchPost = async () => {
         try {
             const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
-            const res = await fetch(`${endpointUrl}/posts`, {
+            const res = await fetch(`${endpointUrl}/posts?offset=${0}`, {
                 method: "GET",
             });
             if (res.ok) {
@@ -47,9 +44,9 @@ const PostIndex = () => {
         fetchPost();
     },[])
 
-    const handleLike = () => {
-        setPushed((prev) => !prev)
-    };
+    const redirectToDetail = (post_id) => {
+        router.push(`/post/${post_id}`)
+    }
 
     return (
         <>
@@ -74,18 +71,15 @@ const PostIndex = () => {
                                     {item.text}
                                 </Text>
                             </Box>
-                            <Flex mt={2}>
+                            <Flex 
+                                justifyContent="flex-end" 
+                                alignItems="flex-end"
+                                style={{ position: 'absolute', bottom: '10px', right: '10px' }}
+                            >
                                 <IconButton 
-                                    icon={pushed ? <BiSolidLike /> : <BiLike />} 
-                                    onClick={() => handleLike()}
-                                    aria-label="Like button"
-                                    mr="4"
-                                    size="sm"
-                                />
-                                <IconButton 
-                                    icon={<FaRegCommentDots/>}
+                                    icon={<MdExpandMore/>}
                                     aria-label="Comment Button"
-                                    onClick={onOpen}
+                                    onClick={() => redirectToDetail(item.id)}
                                     size="sm"
                                 />
                             </Flex>
@@ -94,7 +88,6 @@ const PostIndex = () => {
                 ))}
             </Stack>
         </Box>
-        <CommentModal onClose={onClose} onOpen={onOpen} isOpen={isOpen}/>
         </>
     )
 }

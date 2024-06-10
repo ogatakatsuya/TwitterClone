@@ -42,7 +42,7 @@ const Register = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ user_name : value.email, password : value.password }),
+                body: JSON.stringify({ user_name : value.userName, password : value.password }),
             })
     
         if (!res.ok) {
@@ -81,22 +81,17 @@ const Register = () => {
             Start setting up your account ✌️
             </Text>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl id="email" isRequired isInvalid={!!errors.email} pt={6}>
-                <FormLabel fontSize={"xl1"}>Email address</FormLabel>
+            <FormControl id="userName" isRequired isInvalid={!!errors.email} pt={6}>
+                <FormLabel fontSize={"xl1"}>User name</FormLabel>
                 <Input
-                placeholder="sample@email.com"
+                placeholder="John Doe"
                 _placeholder={{ opacity: "0.3", color: "gray.500" }}
-                {...register("email", {
-                    required: "メールアドレスは必須です。",
-                    pattern: {
-                    value:
-                        /^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-                    message: "不適切なメールアドレスです。",
-                    },
+                {...register("userName", {
+                    required: "名前は必須です。",
                 })}
                 />
                 <FormErrorMessage>
-                {errors.email && errors.email.message}
+                {errors.userName && errors.userName.message}
                 </FormErrorMessage>
             </FormControl>
             <FormControl

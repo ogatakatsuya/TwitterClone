@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, HTTPException, Cookie
+from fastapi import Depends, APIRouter, HTTPException, Cookie, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.repository.posts.posts as post_cruds
@@ -26,10 +26,19 @@ async def create_post(
 
 @router.get("/posts")
 async def get_posts(
+    db: AsyncSession = Depends(get_db),
+    offset: int = Query()
+):
+    posts= await post_cruds.get_posts(db, offset)
+    return posts
+
+@router.get("/post/{post_id}")
+async def get_post(
+    post_id : int,
     db: AsyncSession = Depends(get_db)
 ):
-    posts= await post_cruds.get_posts(db)
-    return posts
+    post = await post_cruds.get_post(db, post_id)
+    return post
 
 @router.delete("/post/{post_id}")
 async def delete_post(
