@@ -33,7 +33,7 @@ async def get_posts_by_parent_id(db: AsyncSession, parent_id: int):
     posts = result.scalars().all()
     return posts
 
-async def get_posts_by_use_id(db: AsyncSession, user_id: int):
+async def get_posts_by_user_id(db: AsyncSession, user_id: int):
     result = await db.execute(
         select(Post)
         .where(Post.user_id == user_id)
