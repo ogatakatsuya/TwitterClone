@@ -6,7 +6,7 @@ from api.schemes.profile import EditProfile, NewProfile
 
 from api.repository.auth.user import get_current_user_id
 from api.repository.posts.posts import get_posts_by_use_id
-from api.repository.profile.profile import get_profile, edit_profile
+from api.repository.user.user import get_profile, edit_profile
 
 router = APIRouter()
 
