@@ -14,7 +14,7 @@ import {
 import { BiLike } from "react-icons/bi";
 import { BiSolidLike } from "react-icons/bi";
 import { FaRegCommentDots } from "react-icons/fa";
-import CommentModal from '../../../home/_components/CommentModal';
+import CommentModal from './CommentModal';
 
 const Post = ({ post_id }) => {
     const [ pushed, setPushed ] = useState(false);
@@ -79,7 +79,7 @@ const Post = ({ post_id }) => {
                     </Flex>
                 </CardBody>
             </Card>
-            <CommentModal onClose={onClose} onOpen={onOpen} isOpen={isOpen}/>
+            <CommentModal onClose={onClose} isOpen={isOpen} post_id={post_id}/>
         </>
     )
 }
