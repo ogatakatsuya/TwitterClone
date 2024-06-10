@@ -14,7 +14,7 @@ import {
 import { BiLike } from "react-icons/bi";
 import { BiSolidLike } from "react-icons/bi";
 import { FaRegCommentDots } from "react-icons/fa";
-import CommentModal from './CommentModal';
+import CommentModal from './ReplyModal';
 
 const Post = ({ post_id }) => {
     const [ pushed, setPushed ] = useState(false);

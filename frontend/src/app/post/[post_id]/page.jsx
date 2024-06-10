@@ -1,6 +1,6 @@
 import { useDisclosure, Stack, StackDivider, Container, Grid } from "@chakra-ui/react"
 
-import CommentModal from './_components/CommentModal';
+import CommentModal from './_components/ReplyModal';
 import Post from "./_components/Post"
 import Replies from "./_components/Replies"
 import MenuBar from "../../home/_components/MenuBar";
