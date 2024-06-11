@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, func
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, func, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
@@ -42,7 +42,7 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey('users.id', name="fk_posts_users"), nullable=False)
     user = relationship("User", back_populates="posts")
     likes = relationship("Like", back_populates="post")
-    
+
 class Like(Base):
     __tablename__ = "likes"
     
@@ -52,3 +52,7 @@ class Like(Base):
     
     user = relationship("User", back_populates="likes")
     post = relationship("Post", back_populates="likes")
+
+    __table_args__ = (
+        UniqueConstraint('user_id', 'post_id', name='uix_user_post'),
+    )

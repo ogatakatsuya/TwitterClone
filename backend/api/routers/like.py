@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.repository.like.like import count_likes, create_like, delete_like
+from api.repository.like.like import count, create_like, delete_like
 from api.repository.auth.user import get_current_user_id
 from api.schemes.likes import LikeInfo
 from api.db import get_db
@@ -12,7 +12,7 @@ router = APIRouter()
 async def get_likes_num(
     post_id: int, db: AsyncSession = Depends(get_db)
 ):
-    likes_num = await count_likes(db, post_id)
+    likes_num = await count(db, post_id)
     return {"like_num":likes_num}
 
 @router.post("/like/{post_id}")

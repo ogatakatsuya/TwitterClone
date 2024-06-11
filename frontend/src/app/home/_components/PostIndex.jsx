@@ -32,7 +32,6 @@ const PostIndex = () => {
             if (res.ok) {
                 const data = await res.json();
                 setPost(data);
-                console.log(data);
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }

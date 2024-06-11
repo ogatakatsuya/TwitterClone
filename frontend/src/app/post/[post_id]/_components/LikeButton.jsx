@@ -8,51 +8,32 @@ import { BiSolidLike } from "react-icons/bi";
 
 const LikeButton = ({ post_id }) => {
     const [ pushed, setPushed ] = useState(false);
-    const [ likeNum, setLikeNum ] = useState();
+    const [ likeNum, setLikeNum ] = useState(0);
     const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
     
     const handleLike = () => {
-        if (!pushed){
-            createLike()
-        } else {
-            deleteLike()
-        }
-        setPushed((prev) => !prev)
+        const method = pushed ? 'DELETE' : 'POST';
+        handleLikeRequest(method);
+        setPushed(prev => !prev);
     };
 
-    const createLike = async () => {
-        const res = await fetch(`${endpointUrl}/like/${post_id}`,{
-            method: "POST",
-            credentials: "include",
+    const handleLikeRequest = async (method) => {
+        const res = await fetch(`${endpointUrl}/like/${post_id}`, {
+            method: method,
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
         });
-        if(res.ok){
-            const data = await res.json();
-            console.log(data)
-            setLikeNum((prev) => prev+1)
-        }else{
-            console.log("error");
-        }
-    }
 
-    const deleteLike = async () => {
-        const res = await fetch(`${endpointUrl}/like/${post_id}`,{
-            method: "DELETE",
-            credentials: "include",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        if(res.ok){
+        if (res.ok) {
             const data = await res.json();
-            console.log(data)
-            setLikeNum((prev) => prev-1)
-        }else{
-            console.log("error");
+            console.log(data);
+            setLikeNum(prev => prev + (method === 'POST' ? 1 : -1));
+        } else {
+            console.log('error');
         }
-    }
+    };
 
     
     useEffect(() => {
@@ -67,7 +48,6 @@ const LikeButton = ({ post_id }) => {
             if (res.ok) {
                 const data = await res.json();
                 setLikeNum(data.like_num);
-                console.log(data);
             } else {
                 console.error("Error fetching like:", res.statusText);
             }
