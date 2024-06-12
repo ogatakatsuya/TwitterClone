@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Cookie, Depends
+from fastapi import APIRouter, Cookie, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.db import get_db
@@ -12,7 +12,9 @@ router = APIRouter()
 
 @router.get("/profile/post")
 async def get_personal_post(
-    db: AsyncSession = Depends(get_db), access_token: str | None = Cookie(default=None)
+    db: AsyncSession = Depends(get_db), 
+    access_token: str | None = Cookie(default=None),
+    offset: int = Query()
 ):
     user_id = await get_current_user_id(db, access_token)
     posts = await get_posts_by_user_id(db, user_id)

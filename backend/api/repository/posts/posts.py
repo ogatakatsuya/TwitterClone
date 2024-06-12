@@ -84,12 +84,26 @@ async def get_posts_by_parent_id(db: AsyncSession, parent_id: int):
 
 async def get_posts_by_user_id(db: AsyncSession, user_id: int):
     result = await db.execute(
-        select(Post)
+        select(Post, User.name)
+        .join(User, Post.user_id == User.id)
         .where(Post.user_id == user_id)
         .where(Post.parent_id == None)
     )
-    posts = result.scalars().all()
-    return posts
+    posts_with_users = result.fetchall()
+    top_level_posts = []
+    
+    for post, user_name in posts_with_users:
+        top_level_posts.append({
+            "id": post.id,
+            "text": post.text,
+            "parent_id": post.parent_id,
+            "created_at": post.created_at,
+            "updated_at": post.updated_at,
+            "user_id": post.user_id,
+            "user_name": user_name
+        })
+    
+    return top_level_posts
 
 async def delete_post(db: AsyncSession, post_id: int):
     result = await db.execute(select(Post).filter_by(id=post_id))
