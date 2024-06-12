@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { MdExpandMore } from "react-icons/md";
 
-const Post = () => {
+const Post = ({ user_id }) => {
     const router = useRouter();
     const [post, setPost] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -25,7 +25,7 @@ const Post = () => {
     const fetchPost = async (offset) => {
         try {
             const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-            const res = await fetch(`${endpointUrl}/profile/post/?offset=${offset}`, {
+            const res = await fetch(`${endpointUrl}/profile/post/${user_id}/?offset=${offset}`, {
                 method: "GET",
                 credentials: "include"
             });

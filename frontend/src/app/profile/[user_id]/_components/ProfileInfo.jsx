@@ -29,7 +29,7 @@ import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { LiaBirthdayCakeSolid } from "react-icons/lia";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({ user_id }) => {
     const [profile, setProfile] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -41,7 +41,7 @@ const ProfileInfo = () => {
 
     const fetchProfile = async () => {
         const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-        const res = await fetch(`${endpointUrl}/profile`, {
+        const res = await fetch(`${endpointUrl}/profile/${user_id}`, {
             method: "GET",
             credentials: "include",
         });
@@ -58,7 +58,7 @@ const ProfileInfo = () => {
 
     const editHandler = async (value) => {
         const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-        const res = await fetch(`${endpointUrl}/profile`,{
+        const res = await fetch(`${endpointUrl}/profile/${user_id}`,{
             method: "PUT",
             credentials: "include",
             headers: {
@@ -125,7 +125,7 @@ const ProfileInfo = () => {
                         <Input placeholder='Nick Name' {
                             ...register("nickname")
                         } 
-                        default={profile.nickname}/>
+                        value={profile.nickname}/>
                         </FormControl>
 
                         <FormControl mt={4}>

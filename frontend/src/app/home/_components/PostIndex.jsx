@@ -12,6 +12,7 @@ import {
     IconButton,
     StackDivider,
     Stack,
+    Link,
 } from '@chakra-ui/react'
 import { MdExpandMore } from "react-icons/md";
 import PostButton from "./PostButton";
@@ -91,7 +92,7 @@ const PostIndex = () => {
                         <Card width="500px" key={item.id} bgColor="gray.100">
                             <CardBody>
                                 <Flex alignItems="center">
-                                    <Avatar />
+                                    <Link href={`/profile/${item.user_id}`}><Avatar /></Link>
                                     <Box ml={3}>
                                         <Text fontSize='md'>
                                             {item.user_name}

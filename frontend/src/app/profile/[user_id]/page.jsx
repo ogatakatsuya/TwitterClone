@@ -17,9 +17,9 @@ const Profile = ({ params }) => {
             <Grid templateColumns="200px 1fr" gap={50} padding={4}>
                 <MenuBar />
                 <Stack divider={<StackDivider />} spacing='4'>
-                    <ProfileInfo />
+                    <ProfileInfo user_id={params.user_id}/>
                     <Bar />
-                    <Post />
+                    <Post user_id={params.user_id}/>
                 </Stack>
             </Grid>
         </Container>

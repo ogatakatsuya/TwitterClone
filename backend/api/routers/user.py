@@ -10,30 +10,27 @@ from api.repository.user.user import get_profile, edit_profile
 
 router = APIRouter()
 
-@router.get("/profile/post")
+@router.get("/profile/post/{user_id}")
 async def get_personal_post(
+    user_id: int,
     db: AsyncSession = Depends(get_db), 
-    access_token: str | None = Cookie(default=None),
     offset: int = Query()
 ):
-    user_id = await get_current_user_id(db, access_token)
     posts = await get_posts_by_user_id(db, user_id)
     return posts
 
 
-@router.get("/profile")
+@router.get("/profile/{user_id}")
 async def get_profile_information(
-    db: AsyncSession = Depends(get_db), access_token: str | None = Cookie(default=None)
+    user_id: int, db: AsyncSession = Depends(get_db)
 ):
-    user_id = await get_current_user_id(db, access_token)
     profile = await get_profile(db, user_id)
     return profile
 
-@router.put("/profile")
+@router.put("/profile/{user_id}")
 async def edit_profile_information(
-    profile_body : EditProfile, db: AsyncSession = Depends(get_db), access_token: str | None =Cookie(default=None)
+    user_id: int, profile_body : EditProfile, db: AsyncSession = Depends(get_db)
 ):
-    user_id = await get_current_user_id(db, access_token)
     new_post = NewProfile(
         user_id = user_id,
         nickname = profile_body.nickname,
