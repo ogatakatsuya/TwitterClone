@@ -47,7 +47,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
     } else {
       onClose();
       const data = await res.json();
-      console.log(data.new_post);
+      console.log(data);
     }
   };
   

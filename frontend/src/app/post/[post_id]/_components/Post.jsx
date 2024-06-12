@@ -34,13 +34,13 @@ const Post = ({ post_id }) => {
     }, [])
     return (
         <>
-            <Card width="500px">
+            <Card width="500px" bgColor="gray.100">
                 <CardBody>
                     <Flex alignItems="center">
                         <Avatar />
                         <Box ml={3}>
                             <Text fontSize='md'>
-                                John Doe
+                                {post.user_name}
                             </Text>
                             <Text fontSize='xs'>
                                 {post.created_at}

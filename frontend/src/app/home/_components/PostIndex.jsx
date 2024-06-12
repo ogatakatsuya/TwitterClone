@@ -53,13 +53,13 @@ const PostIndex = () => {
         <Box maxH="680px" overflowY="auto">
             <Stack divider={<StackDivider />} spacing='4'>
                 {post.map((item) => (
-                    <Card width="500px" key={item.id}>
+                    <Card width="500px" key={item.id} bgColor="gray.100">
                         <CardBody>
                             <Flex alignItems="center">
                                 <Avatar />
                                 <Box ml={3}>
                                     <Text fontSize='md'>
-                                        John Doe
+                                        {item.user_name}
                                     </Text>
                                     <Text fontSize='xs'>
                                         {item.created_at}
