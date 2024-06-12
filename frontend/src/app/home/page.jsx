@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
 
-import { Flex, Grid, Heading, Input, VStack, Container } from "@chakra-ui/react";
+import { Flex, Grid, Container } from "@chakra-ui/react";
 import PostIndex from "./_components/PostIndex";
-import PostButton from "./_components/PostButton";
 import MenuBar from "./_components/MenuBar"
 import SearchBar from "./_components/SearchBar"
 

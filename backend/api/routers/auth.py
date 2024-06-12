@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, HTTPException, status, Response
+from fastapi import Depends, APIRouter, HTTPException, status, Response, Cookie
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -45,3 +45,10 @@ async def logout_user(
 ):
     response.delete_cookie(key="access_token", path="/")
     return {"message": "Successfully log out"}
+
+@router.get("/user")
+async def get_user_id(
+    db: AsyncSession = Depends(get_db), access_token: str | None = Cookie(default=None)
+):
+    user_id = await get_current_user_id(db, access_token)
+    return user_id

@@ -39,6 +39,7 @@ const PostIndex = () => {
                     setPost((prevPosts) => [...prevPosts, ...data]);
                     console.log(data)
                 }
+                setHasMore( data.length == 10 )
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }
