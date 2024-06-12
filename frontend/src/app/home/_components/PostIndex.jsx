@@ -1,21 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { 
-    Card, 
-    CardHeader, 
-    CardBody, 
-    CardFooter ,
-    Stack,
+import {
+    Card,
+    CardBody,
     Text,
-    StackDivider,
     Box,
-    Heading,
     Avatar,
     Flex,
     IconButton,
-    useDisclosure,
+    StackDivider,
+    Stack,
 } from '@chakra-ui/react'
 import { MdExpandMore } from "react-icons/md";
 import PostButton from "./PostButton";
@@ -23,74 +19,115 @@ import PostButton from "./PostButton";
 const PostIndex = () => {
     const router = useRouter();
     const [post, setPost] = useState([]);
-    const fetchPost = async () => {
+    const [hasMore, setHasMore] = useState(true);
+    const [offset, setOffset] = useState(0);
+    const observerTarget = useRef(null);
+
+    const fetchPost = async (offset) => {
         try {
-            const endpointUrl= process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
-            const res = await fetch(`${endpointUrl}/posts?offset=${0}`, {
+            const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
+            const res = await fetch(`${endpointUrl}/posts?offset=${offset}`, {
                 method: "GET",
             });
             if (res.ok) {
                 const data = await res.json();
-                setPost(data);
+                if (offset == 0) { //初回表示時はレンダリングが2回行われるため
+                    setPost(data);
+                    setOffset(0);
+                    console.log(data)
+                } else {
+                    setPost((prevPosts) => [...prevPosts, ...data]);
+                    console.log(data)
+                }
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }
         } catch (error) {
             console.error("Error fetching posts:", error);
         }
-    }
+    };
+
+    useEffect(() => {
+        fetchPost(offset)
+    },[])
     
     useEffect(() => {
-        fetchPost();
-    },[])
+        if (hasMore && offset>0) {
+            console.log("fetch post")
+            fetchPost(offset);
+        }
+    }, [offset, hasMore]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setOffset((prev) => prev + 10);
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        if (observerTarget.current) {
+            observer.observe(observerTarget.current);
+        }
+        return () => {
+            if (observerTarget.current) {
+                observer.unobserve(observerTarget.current);
+            }
+        };
+    }, [hasMore, observerTarget]);
 
     const redirectToDetail = (post_id) => {
-        router.push(`/post/${post_id}`)
+        router.push(`/post/${post_id}`);
     }
 
     return (
         <>
-        <Box maxH="680px" overflowY="auto">
-            <Stack divider={<StackDivider />} spacing='4'>
-                {post.map((item) => (
-                    <Card width="500px" key={item.id} bgColor="gray.100">
-                        <CardBody>
-                            <Flex alignItems="center">
-                                <Avatar />
-                                <Box ml={3}>
-                                    <Text fontSize='md'>
-                                        {item.user_name}
-                                    </Text>
-                                    <Text fontSize='xs'>
-                                        {item.created_at}
+            <Box maxH="680px" overflowY="auto">
+                <Stack divider={<StackDivider />} spacing='4'>
+                    {post.map((item) => (
+                        <Card width="500px" key={item.id} bgColor="gray.100">
+                            <CardBody>
+                                <Flex alignItems="center">
+                                    <Avatar />
+                                    <Box ml={3}>
+                                        <Text fontSize='md'>
+                                            {item.user_name}
+                                        </Text>
+                                        <Text fontSize='xs'>
+                                            {item.created_at}
+                                        </Text>
+                                    </Box>
+                                </Flex>
+                                <Box key={item.id}>
+                                    <Text mt='4' fontSize='md'>
+                                        {item.text}
                                     </Text>
                                 </Box>
-                            </Flex>
-                            <Box key={item.id}>
-                                <Text mt='4' fontSize='md'>
-                                    {item.text}
-                                </Text>
-                            </Box>
-                            <Flex 
-                                justifyContent="flex-end" 
-                                alignItems="flex-end"
-                                style={{ position: 'absolute', bottom: '10px', right: '10px' }}
-                            >
-                                <IconButton 
-                                    icon={<MdExpandMore/>}
-                                    aria-label="Comment Button"
-                                    onClick={() => redirectToDetail(item.id)}
-                                    size="sm"
-                                />
-                            </Flex>
-                        </CardBody>
-                    </Card>
-                ))}
-            </Stack>
-        </Box>
-        <PostButton setPost={setPost}/>
+                                <Flex
+                                    justifyContent="flex-end"
+                                    alignItems="flex-end"
+                                    style={{ position: 'absolute', bottom: '10px', right: '10px' }}
+                                >
+                                    <IconButton
+                                        icon={<MdExpandMore />}
+                                        aria-label="Comment Button"
+                                        onClick={() => redirectToDetail(item.id)}
+                                        size="sm"
+                                    />
+                                </Flex>
+                            </CardBody>
+                        </Card>
+                    ))}
+                </Stack>
+                <div ref={observerTarget} style={{ height: '20px' }}>
+                    {/* ここでロード */}
+                </div>
+            </Box>
+            <PostButton setPost={setPost}/>
         </>
-    )
+    );
 }
 
 export default PostIndex;
