@@ -103,7 +103,7 @@ const ProfileInfo = () => {
                             </Text>
                         </CardBody>
                     </Card>
-                        <Text>{profile?.birth_day ? `Birthday : ${profile.birth_day}` : "Birthday : Tell me your birthday!"}</Text>
+                        <Text as="b">{profile?.birth_day ? `Birthday : ${profile.birth_day}` : "Birthday : Tell me your birthday!"}</Text>
                         <Button bgColor="blue.200" onClick={onOpen}>
                             Edit Profile
                         </Button>
