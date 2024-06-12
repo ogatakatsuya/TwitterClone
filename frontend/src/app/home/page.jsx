@@ -14,7 +14,6 @@ const Home = () => {
                 <MenuBar />
                 <Flex direction="column" align="center">
                     <PostIndex />
-                    { access_token && <PostButton />}
                 </Flex>
                 <SearchBar />
             </Grid>

@@ -11,13 +11,11 @@ import {
     IconButton,
     useDisclosure,
 } from '@chakra-ui/react'
-import { BiLike } from "react-icons/bi";
-import { BiSolidLike } from "react-icons/bi";
 import { FaRegCommentDots } from "react-icons/fa";
 import CommentModal from './ReplyModal';
+import LikeButton from './LikeButton';
 
 const Post = ({ post_id }) => {
-    const [ pushed, setPushed ] = useState(false);
     const [ post, setPost ] = useState("");
     const { isOpen, onOpen, onClose } = useDisclosure()
     
@@ -31,22 +29,18 @@ const Post = ({ post_id }) => {
         }
     }
 
-    const handleLike = () => {
-        setPushed((prev) => !prev)
-    };
-
     useEffect(() => {
         fetchPost();
     }, [])
     return (
         <>
-            <Card width="500px">
+            <Card width="500px" bgColor="gray.100">
                 <CardBody>
                     <Flex alignItems="center">
                         <Avatar />
                         <Box ml={3}>
                             <Text fontSize='md'>
-                                John Doe
+                                {post.user_name}
                             </Text>
                             <Text fontSize='xs'>
                                 {post.created_at}
@@ -63,13 +57,7 @@ const Post = ({ post_id }) => {
                         alignItems="flex-end"
                         style={{ position: 'absolute', bottom: '10px', right: '10px' }}
                     >
-                        <IconButton 
-                            icon={pushed ? <BiSolidLike /> : <BiLike />} 
-                            onClick={() => handleLike()}
-                            aria-label="Like button"
-                            mr="4"
-                            size="sm"
-                        />
+                        <LikeButton post_id={post_id}/>
                         <IconButton 
                             icon={<FaRegCommentDots />}
                             aria-label="Comment Button"

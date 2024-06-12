@@ -20,9 +20,9 @@ async def create_post(
     user_id = await get_current_user_id(db, access_token)
 
     post_body = post_schema.CreatePost(text=post.text, user_id=user_id)
-    await post_cruds.create_post(db, post_body)
+    new_post = await post_cruds.create_post(db, post_body)
     await db.commit()
-    return {"message": "successfully posted."}
+    return {"new_post": new_post}
 
 @router.get("/posts")
 async def get_posts(
