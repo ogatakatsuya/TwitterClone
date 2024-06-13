@@ -26,10 +26,11 @@ async def create_post(
 
 @router.get("/posts")
 async def get_posts(
-    db: AsyncSession = Depends(get_db),
-    offset: int = Query()
+    offset: int,
+    limit: int,
+    db: AsyncSession = Depends(get_db)
 ):
-    posts= await post_cruds.get_posts(db, offset)
+    posts= await post_cruds.get_posts(db, offset, limit)
     return posts
 
 @router.get("/post/{post_id}")

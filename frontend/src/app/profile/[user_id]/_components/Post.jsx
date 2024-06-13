@@ -12,12 +12,10 @@ import {
     IconButton,
     StackDivider,
     Stack,
-    Link,
 } from '@chakra-ui/react'
 import { MdExpandMore } from "react-icons/md";
-import PostButton from "./PostButton";
 
-const PostIndex = () => {
+const Post = ({ user_id }) => {
     const router = useRouter();
     const [post, setPost] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -27,9 +25,8 @@ const PostIndex = () => {
     const fetchPost = async (offset) => {
         try {
             const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-            const fetchLimit = 10
-            const res = await fetch(`${endpointUrl}/posts?offset=${offset}&limit=${fetchLimit}`, {
-                method: "GET",
+            const res = await fetch(`${endpointUrl}/profile/post/${user_id}/?offset=${offset}`, {
+                method: "GET"
             });
             if (res.ok) {
                 const data = await res.json();
@@ -41,7 +38,7 @@ const PostIndex = () => {
                     setPost((prevPosts) => [...prevPosts, ...data]);
                     console.log(data)
                 }
-                setHasMore( data.length == fetchLimit )
+                setHasMore( data.length == 10 )
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }
@@ -85,30 +82,21 @@ const PostIndex = () => {
         router.push(`/post/${post_id}`);
     }
 
-    const formatDate = (date) => {
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-        const hours = ('0' + date.getHours()).slice(-2);
-        const minutes = ('0' + date.getMinutes()).slice(-2);
-        return `${year}/${month}/${day} ${hours}:${minutes}`;
-    };
-
     return (
         <>
             <Box maxH="680px" overflowY="auto">
                 <Stack divider={<StackDivider />} spacing='4'>
                     {post.map((item) => (
-                        <Card width="500px" key={item.id} bgColor="gray.100">
+                        <Card width="650px" key={item.id} bgColor="gray.100">
                             <CardBody>
                                 <Flex alignItems="center">
-                                    <Link href={`/profile/${item.user_id}`}><Avatar /></Link>
+                                    <Avatar />
                                     <Box ml={3}>
                                         <Text fontSize='md'>
                                             {item.user_name}
                                         </Text>
                                         <Text fontSize='xs'>
-                                            {formatDate(new Date(item.created_at))}
+                                            {item.created_at}
                                         </Text>
                                     </Box>
                                 </Flex>
@@ -137,9 +125,8 @@ const PostIndex = () => {
                     {/* ここでロード */}
                 </div>
             </Box>
-            <PostButton setPost={setPost}/>
         </>
     );
 }
 
-export default PostIndex;
+export default Post;

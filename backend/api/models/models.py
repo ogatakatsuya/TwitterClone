@@ -18,10 +18,6 @@ class User(Base):
     is_deleted = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.now, server_default=func.now(), nullable=False)
     
-    posts = relationship("Post", back_populates="user")
-    password = relationship("Password", back_populates="user", uselist=False)
-    likes = relationship("Like", back_populates="user")
-    
 class Password(Base):
     __tablename__ = "passwords"
     
@@ -29,7 +25,6 @@ class Password(Base):
     password = Column(String(1024), nullable=False)
     
     user_id = Column(Integer, ForeignKey('users.id', name="user_password"), nullable=False)
-    user = relationship("User", back_populates="password")
 
 class Post(Base):
     __tablename__ = "posts"
@@ -41,8 +36,6 @@ class Post(Base):
     updated_at = Column(DateTime, default=datetime.now(), server_default=func.now(), onupdate=datetime.now(), nullable=False)
 
     user_id = Column(Integer, ForeignKey('users.id', name="fk_posts_users"), nullable=False)
-    user = relationship("User", back_populates="posts")
-    likes = relationship("Like", back_populates="post")
 
 class Like(Base):
     __tablename__ = "likes"
@@ -50,10 +43,18 @@ class Like(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id', name="fk_likes_users"), nullable=False)
     post_id = Column(Integer, ForeignKey('posts.id', name="fk_likes_posts"), nullable=False)
-    
-    user = relationship("User", back_populates="likes")
-    post = relationship("Post", back_populates="likes")
 
     __table_args__ = (
         UniqueConstraint('user_id', 'post_id', name='uix_user_post'),
+    )
+
+class Follow(Base):
+    __tablename__ = "follows"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    follow_id = Column(Integer, ForeignKey('users.id', name="fk_follows_follow_id"), nullable=False)
+    followed_id = Column(Integer, ForeignKey('users.id', name="fk_follows_followed_id"), nullable=False)
+    
+    __table_args__ = (
+        UniqueConstraint('follow_id', 'followed_id', name='uix_follow_followed'),
     )
