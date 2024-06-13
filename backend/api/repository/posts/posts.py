@@ -34,13 +34,13 @@ async def get_post(db: AsyncSession, post_id: int):
         }
     return None
 
-async def get_posts(db: AsyncSession, offset: int):
+async def get_posts(db: AsyncSession, offset: int, limit: int):
     result = await db.execute(
         select(Post, User.name)
         .join(User, Post.user_id == User.id)
         .where(Post.parent_id == None)
         .order_by(Post.id.desc())
-        .limit(10)
+        .limit(limit)
         .offset(offset)
     )
     

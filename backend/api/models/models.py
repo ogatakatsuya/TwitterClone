@@ -55,5 +55,6 @@ class Follow(Base):
     follow_id = Column(Integer, ForeignKey('users.id', name="fk_follows_follow_id"), nullable=False)
     followed_id = Column(Integer, ForeignKey('users.id', name="fk_follows_followed_id"), nullable=False)
     
-    user_follow = relationship("User", foreign_keys=[follow_id])
-    user_followed = relationship("User", foreign_keys=[followed_id])
+    __table_args__ = (
+        UniqueConstraint('follow_id', 'followed_id', name='uix_follow_followed'),
+    )

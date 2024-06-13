@@ -78,6 +78,13 @@ const ProfileInfo = ({ user_id }) => {
         }
     }
 
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}/${month}/${day}`;
+    };
+
     if (!profile) {
         return <Text>Loading...</Text>;
     }
@@ -103,7 +110,7 @@ const ProfileInfo = ({ user_id }) => {
                             </Text>
                         </CardBody>
                     </Card>
-                        <Text as="b">{profile?.birth_day ? `Birthday : ${profile.birth_day}` : "Birthday : Tell me your birthday!"}</Text>
+                        <Text as="b">{profile?.birth_day ? `Birthday : ${formatDate(new Date(profile.birth_day))}` : "Birthday : Tell me your birthday!"}</Text>
                         <Button bgColor="blue.200" onClick={onOpen}>
                             Edit Profile
                         </Button>

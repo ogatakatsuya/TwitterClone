@@ -27,7 +27,8 @@ const PostIndex = () => {
     const fetchPost = async (offset) => {
         try {
             const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-            const res = await fetch(`${endpointUrl}/posts?offset=${offset}`, {
+            const fetchLimit = 10
+            const res = await fetch(`${endpointUrl}/posts?offset=${offset}&limit=${fetchLimit}`, {
                 method: "GET",
             });
             if (res.ok) {
@@ -40,7 +41,7 @@ const PostIndex = () => {
                     setPost((prevPosts) => [...prevPosts, ...data]);
                     console.log(data)
                 }
-                setHasMore( data.length == 10 )
+                setHasMore( data.length == fetchLimit )
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }
@@ -84,6 +85,15 @@ const PostIndex = () => {
         router.push(`/post/${post_id}`);
     }
 
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        const hours = ('0' + date.getHours()).slice(-2);
+        const minutes = ('0' + date.getMinutes()).slice(-2);
+        return `${year}/${month}/${day} ${hours}:${minutes}`;
+    };
+
     return (
         <>
             <Box maxH="680px" overflowY="auto">
@@ -98,7 +108,7 @@ const PostIndex = () => {
                                             {item.user_name}
                                         </Text>
                                         <Text fontSize='xs'>
-                                            {item.created_at}
+                                            {formatDate(new Date(item.created_at))}
                                         </Text>
                                     </Box>
                                 </Flex>

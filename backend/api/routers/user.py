@@ -13,8 +13,8 @@ router = APIRouter()
 @router.get("/profile/post/{user_id}")
 async def get_personal_post(
     user_id: int,
+    offset: int,
     db: AsyncSession = Depends(get_db), 
-    offset: int = Query()
 ):
     posts = await get_posts_by_user_id(db, user_id)
     return posts

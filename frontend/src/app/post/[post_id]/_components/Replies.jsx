@@ -38,6 +38,15 @@ const Replies = ({ post_id }) => {
         router.push(`/post/${post_id}`);
     }
 
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        const hours = ('0' + date.getHours()).slice(-2);
+        const minutes = ('0' + date.getMinutes()).slice(-2);
+        return `${year}/${month}/${day} ${hours}:${minutes}`;
+    };
+
     return (
         <>
         <Box maxH="500px" overflowY="auto"> 
@@ -52,7 +61,7 @@ const Replies = ({ post_id }) => {
                                             {item.user_name}
                                         </Text>
                                         <Text fontSize='xs'>
-                                            {item.created_at}
+                                            {formatDate(new Date(item.created_at))}
                                         </Text>
                                     </Box>
                                 </Flex>

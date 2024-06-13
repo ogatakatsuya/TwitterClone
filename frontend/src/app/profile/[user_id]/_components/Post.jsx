@@ -26,8 +26,7 @@ const Post = ({ user_id }) => {
         try {
             const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
             const res = await fetch(`${endpointUrl}/profile/post/${user_id}/?offset=${offset}`, {
-                method: "GET",
-                credentials: "include"
+                method: "GET"
             });
             if (res.ok) {
                 const data = await res.json();
