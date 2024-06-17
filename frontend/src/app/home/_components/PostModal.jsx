@@ -21,7 +21,7 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 
-export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
+export default function PostModal({ isOpen, onOpen, onClose, fetchPost }) {
   const {
     register,
     handleSubmit,
@@ -45,6 +45,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
       console.log(data)
       setSubmitError(data.detail);
     } else {
+      fetchPost(0)
       onClose();
       const data = await res.json();
       console.log(data);

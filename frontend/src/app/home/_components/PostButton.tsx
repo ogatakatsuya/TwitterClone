@@ -4,7 +4,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, useDisclosure } from '@chakra-ui/react'
 import PostModal from './PostModal'
 
-export default function PostButton({ setPost }) {
+export default function PostButton({ fetchPost }) {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -34,7 +34,7 @@ export default function PostButton({ setPost }) {
           <AddIcon />
         </Button>
       </Box>
-      <PostModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} setPost={setPost}/>
+      <PostModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} fetchPost={fetchPost}/>
     </>
   )
 }

@@ -44,11 +44,11 @@ const FollowButton = ({ user_id }) => {
     return (
         <> 
             {following ? (
-                <Button onClick={clickHandler}>
+                <Button onClick={clickHandler} bgColor="blue.200">
                     Following
                 </Button>
             ):
-                <Button onClick={clickHandler}>
+                <Button onClick={clickHandler} bgColor="blue.200">
                     Follow
                 </Button>
             }

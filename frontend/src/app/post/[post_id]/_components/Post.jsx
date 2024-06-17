@@ -12,7 +12,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import { FaRegCommentDots } from "react-icons/fa";
-import CommentModal from './ReplyModal';
+import ReplyMordal from './ReplyModal';
 import LikeButton from './LikeButton';
 
 const Post = ({ post_id }) => {
@@ -76,7 +76,7 @@ const Post = ({ post_id }) => {
                     </Flex>
                 </CardBody>
             </Card>
-            <CommentModal onClose={onClose} isOpen={isOpen} post_id={post_id}/>
+            <ReplyMordal onClose={onClose} isOpen={isOpen} post_id={post_id}/>
         </>
     )
 }
