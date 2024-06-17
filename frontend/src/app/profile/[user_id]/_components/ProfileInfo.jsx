@@ -4,40 +4,19 @@ import {
     Avatar,
     Text,
     Grid,
-    Button,
     Flex,
-    Box,
     Container,
-    useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    FormControl,
-    FormLabel,
-    Input,
-    Textarea,
     Stack,
     Card,
     CardBody
 } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form"
-import { LiaBirthdayCakeSolid } from "react-icons/lia";
+
+import FollowButton from "./FollowButton";
 
 const ProfileInfo = ({ user_id }) => {
     const [profile, setProfile] = useState(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors, isSubmitting },
-    } = useForm()
 
     const fetchProfile = async () => {
         const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
@@ -55,28 +34,6 @@ const ProfileInfo = ({ user_id }) => {
     useEffect(() => {
         fetchProfile();
     }, []);
-
-    const editHandler = async (value) => {
-        const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-        const res = await fetch(`${endpointUrl}/profile/${user_id}`,{
-            method: "PUT",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nickname: value.nickname,
-                biography: value.biography,
-                birth_day: value.birthday
-            })
-        })
-        if(res.ok){
-            onClose();
-            fetchProfile();
-        } else {
-            console.log("error");
-        }
-    }
 
     const formatDate = (date) => {
         const year = date.getFullYear();
@@ -111,6 +68,7 @@ const ProfileInfo = ({ user_id }) => {
                         </CardBody>
                     </Card>
                         <Text as="b">{profile?.birth_day ? `Birthday : ${formatDate(new Date(profile.birth_day))}` : "Birthday : unknown"}</Text>
+                        <FollowButton/>
                     </Stack>
                 </Flex>
             </Grid>

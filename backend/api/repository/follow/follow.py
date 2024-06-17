@@ -18,6 +18,16 @@ async def follow(db: AsyncSession, follow_body: FollowBody):
     except IntegrityError as sqlalchemy_error:
         db.rollback()
         raise sqlalchemy_error.orig
+    
+async def delete_follow(db: AsyncSession, follow_body: FollowBody):
+    result = await db.execute(
+        select(Follow)
+        .where(Follow.follow_id == follow_body.user_id)
+        .where(Follow.followed_id == follow_body.follow_id)
+    )
+    follow = result.scalar_one_or_none()
+    await db.delete(follow)
+    return follow
 
 async def count_following_users(db: AsyncSession, user_id: int):
     result = await db.execute(
