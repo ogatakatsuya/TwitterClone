@@ -29,8 +29,8 @@ import {
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { LiaBirthdayCakeSolid } from "react-icons/lia";
-import Follow from "./Follow";
-import Follower from "./Follower";
+import MyFollow from "./MyFollow";
+import MyFollower from "./MyFollower";
 
 const MyProfileInfo = ({ user_id }) => {
     const [profile, setProfile] = useState(null);
@@ -104,8 +104,8 @@ const MyProfileInfo = ({ user_id }) => {
                         @{profile?.name}
                     </Text>
                     <HStack>
-                        <Follow />
-                        <Follower />
+                        <MyFollow />
+                        <MyFollower />
                     </HStack>
                 </Container>
                 <Flex alignItems="center" justifyContent="center">

@@ -8,12 +8,15 @@ import {
     Container,
     Stack,
     Card,
-    CardBody
+    CardBody,
+    HStack
 } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
 
 import FollowButton from "./FollowButton";
+import Follow from "./Follow";
+import Follower from "./Follower";
 
 const ProfileInfo = ({ user_id }) => {
     const [profile, setProfile] = useState(null);
@@ -57,6 +60,10 @@ const ProfileInfo = ({ user_id }) => {
                     <Text as="i" opacity="0.5">
                         @{profile.name}
                     </Text>
+                    <HStack>
+                        <Follow user_id={user_id} />
+                        <Follower user_id={user_id} />
+                    </HStack>
                 </Container>
                 <Flex alignItems="center" justifyContent="center">
                     <Stack spacing={4} textAlign="center">

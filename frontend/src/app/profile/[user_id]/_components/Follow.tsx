@@ -3,14 +3,14 @@
 import { HStack, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-const Follower = () => {
-    const [ followerNum, setFollowerNum ] = useState(0);
+const Follow = ({user_id}) => {
+    const [ followNum, setFollowNum ] = useState(0);
     useEffect(() => {
-        fetchFollowerNum()
+        fetchFollowNum()
     })
-    const fetchFollowerNum = async() => {
+    const fetchFollowNum = async() => {
         const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
-        const res = await fetch(`${endpointUrl}/followed`,{
+        const res = await fetch(`${endpointUrl}/follow/${user_id}`,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ const Follower = () => {
         })
         if(res.ok){
             const data = await res.json();
-            setFollowerNum(data)
+            setFollowNum(data)
         } else {
             console.log('error');
         }
@@ -27,11 +27,11 @@ const Follower = () => {
     return (
         <>
             <HStack>
-                <Text as="b">{followerNum}</Text>
-                <Text opacity={0.5}>Follower</Text>
+                <Text as="b">{followNum}</Text>
+                <Text opacity={0.5}>Following</Text>
             </HStack>
         </>
     )
 }
 
-export default Follower;
+export default Follow;
