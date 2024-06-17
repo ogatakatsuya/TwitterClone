@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, func, UniqueConstraint
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, func, UniqueConstraint, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
@@ -21,10 +21,8 @@ class User(Base):
 class Password(Base):
     __tablename__ = "passwords"
     
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('users.id', name="user_password"), nullable=False, primary_key=True)
     password = Column(String(1024), nullable=False)
-    
-    user_id = Column(Integer, ForeignKey('users.id', name="user_password"), nullable=False)
 
 class Post(Base):
     __tablename__ = "posts"
@@ -57,4 +55,6 @@ class Follow(Base):
     
     __table_args__ = (
         UniqueConstraint('follow_id', 'followed_id', name='uix_follow_followed'),
+        Index('idx_follow_id', 'follow_id'),
+        Index('idx_followed_id', 'followed_id'),
     )

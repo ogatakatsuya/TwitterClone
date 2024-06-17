@@ -95,10 +95,10 @@ const ProfileInfo = ({ user_id }) => {
                 <Container centerContent>
                     <Avatar size="2xl" src={profile?.avatar_url} />
                     <Text mt={1} as="b">
-                        {profile?.nickname}
+                        {profile.nickname ? profile.nickname : "unknown"}
                     </Text>
                     <Text as="i" opacity="0.5">
-                        @{profile?.name}
+                        @{profile.name}
                     </Text>
                 </Container>
                 <Flex alignItems="center" justifyContent="center">
@@ -106,60 +106,14 @@ const ProfileInfo = ({ user_id }) => {
                     <Card maxHeight="150px" overflowY="auto">
                         <CardBody>
                             <Text as="b">
-                                {profile?.biography ? profile.biography : "Biography : Tell me about yourself!"}
+                                {profile?.biography ? profile.biography : "Biography : unknown"}
                             </Text>
                         </CardBody>
                     </Card>
-                        <Text as="b">{profile?.birth_day ? `Birthday : ${formatDate(new Date(profile.birth_day))}` : "Birthday : Tell me your birthday!"}</Text>
-                        <Button bgColor="blue.200" onClick={onOpen}>
-                            Edit Profile
-                        </Button>
+                        <Text as="b">{profile?.birth_day ? `Birthday : ${formatDate(new Date(profile.birth_day))}` : "Birthday : unknown"}</Text>
                     </Stack>
                 </Flex>
             </Grid>
-            <Modal
-                isOpen={isOpen}
-                onClose={onClose}
-            >
-                <ModalOverlay />
-                <ModalContent>
-                <ModalHeader>Edit your profile</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody pb={6}>
-                    <form onSubmit={handleSubmit(editHandler)}>
-                        <FormControl>
-                        <FormLabel>Nickname</FormLabel>
-                        <Input placeholder='Nick Name' {
-                            ...register("nickname")
-                        } 
-                        value={profile.nickname}/>
-                        </FormControl>
-
-                        <FormControl mt={4}>
-                        <FormLabel>Birthday</FormLabel>
-                        <Input placeholder='Birthday' type="date" {
-                            ...register("birthday")
-                        } 
-                        default={profile.birth_day}/>
-                        </FormControl>
-
-                        <FormControl mt={4}>
-                        <FormLabel>Biography</FormLabel>
-                        <Textarea placeholder='Biography' {
-                            ...register("biography")
-                        }
-                        default={profile.biography}/>
-                        </FormControl>
-                        <Flex justifyContent="end">
-                            <Button colorScheme='blue' mr={3} type="submit" isLoading={isSubmitting} mt={4}>
-                                Edit
-                            </Button>
-                            <Button onClick={onClose} mt={4}>Cancel</Button>
-                        </Flex>
-                    </form>
-                </ModalBody>
-                </ModalContent>
-            </Modal>
         </>
     );
 };

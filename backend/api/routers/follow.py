@@ -1,5 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession
+from psycopg2 import errors as psycopg2_errors
 
 from api.db import get_db
 from api.schemes.follow import CreateFollow, FollowBody
@@ -35,22 +36,25 @@ async def follow_user(
     access_token: str | None = Cookie(default=None)
 ):
     user_id = await get_current_user_id(db, access_token)
-    follow_body = FollowBody(
-        user_id = user_id,
-        follow_id = follow_id
-    )
-    success = await follow(db, follow_body)
-    if success:
+    try:
+        follow_body = FollowBody(
+            user_id=user_id,
+            follow_id=follow_id
+        )
+        await follow(db, follow_body)
         await db.commit()
         return {"message": "successfully followed"}
-    else:
-        raise HTTPException(code_status=404, detail="failed to follow") #TODO:ここ実行されないかも，要変更
     
+    except psycopg2_errors.UniqueViolation as e:
+        raise HTTPException(status_code=400, detail="can't follow the same user.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
 @router.get("/follow/{user_id}")
 async def get_users_following(
     user_id: int,
     db: AsyncSession = Depends(get_db)
-): #こっちは自分以外のユーザのフォロー情報を取得するやつ
+):
     following_num = await count_following_users(db, user_id)
     return following_num
 
@@ -58,6 +62,6 @@ async def get_users_following(
 async def get_users_followed(
     user_id: int,
     db: AsyncSession = Depends(get_db)
-): #こっちは自分以外のユーザのフォロー情報を取得するやつ
+):
     followed_num = await count_followed_users(db, user_id)
     return followed_num
