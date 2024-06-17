@@ -22,12 +22,15 @@ import {
     Textarea,
     Stack,
     Card,
-    CardBody
+    CardBody,
+    HStack
 } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { LiaBirthdayCakeSolid } from "react-icons/lia";
+import Follow from "./Follow";
+import Follower from "./Follower";
 
 const MyProfileInfo = ({ user_id }) => {
     const [profile, setProfile] = useState(null);
@@ -100,6 +103,10 @@ const MyProfileInfo = ({ user_id }) => {
                     <Text as="i" opacity="0.5">
                         @{profile?.name}
                     </Text>
+                    <HStack>
+                        <Follow />
+                        <Follower />
+                    </HStack>
                 </Container>
                 <Flex alignItems="center" justifyContent="center">
                     <Stack spacing={4} textAlign="center">

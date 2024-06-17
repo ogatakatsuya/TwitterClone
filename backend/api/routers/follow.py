@@ -4,7 +4,7 @@ from psycopg2 import errors as psycopg2_errors
 
 from api.db import get_db
 from api.schemes.follow import CreateFollow, FollowBody
-from api.repository.follow.follow import follow, count_followed_users, count_following_users, delete_follow
+from api.repository.follow.follow import follow, count_followed_users, count_following_users, delete_follow, is_follow
 from api.repository.auth.user import get_current_user_id
 
 router = APIRouter()
@@ -83,3 +83,19 @@ async def get_users_followed(
 ):
     followed_num = await count_followed_users(db, user_id)
     return followed_num
+
+@router.get("/isfollow/{follow_id}")
+async def find_follow(
+    follow_id: int,
+    db: AsyncSession = Depends(get_db),
+    access_token: str | None = Cookie(default=None)
+):
+    user_id = await get_current_user_id(db, access_token)
+    follow_body = FollowBody(
+        user_id = user_id,
+        follow_id = follow_id
+    )
+    follow = await is_follow(db, follow_body)
+    if follow:
+        return True
+    return False

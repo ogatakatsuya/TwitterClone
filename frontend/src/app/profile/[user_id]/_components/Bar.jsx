@@ -11,8 +11,6 @@ const Bar = () => {
             <Flex justifyContent="center">
                 <HStack spacing="30px">
                     <Link href="#">Posts</Link>
-                    <Text>/</Text>
-                    <Link href="#">Likes</Link>
                 </HStack>
             </Flex>
         </>

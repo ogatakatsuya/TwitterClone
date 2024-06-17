@@ -68,7 +68,7 @@ const ProfileInfo = ({ user_id }) => {
                         </CardBody>
                     </Card>
                         <Text as="b">{profile?.birth_day ? `Birthday : ${formatDate(new Date(profile.birth_day))}` : "Birthday : unknown"}</Text>
-                        <FollowButton/>
+                        <FollowButton user_id={user_id} />
                     </Stack>
                 </Flex>
             </Grid>

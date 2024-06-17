@@ -46,3 +46,12 @@ async def count_followed_users(db: AsyncSession, user_id: int):
     followed_num = result.scalar()
     
     return followed_num
+
+async def is_follow(db: AsyncSession, follow_body: FollowBody):
+    result = await db.execute(
+        select(Follow)
+        .where(Follow.follow_id == follow_body.user_id)
+        .where(Follow.followed_id == follow_body.follow_id)
+    )
+    follow = result.scalar_one_or_none()
+    return follow
