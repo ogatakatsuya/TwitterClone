@@ -9,12 +9,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: List files in the backend directory
-        run: |
-          ls
-          cd backend
+        uses: actions/checkout@v4ackend
           ls
 
       - name: Build Docker images
@@ -23,12 +18,9 @@ jobs:
       - name: Start Docker containers
         run: docker-compose up -d
 
-      - name: List files in the backend .venv/bin directory
-        run: docker-compose run backend ls -la .venv/bin
-
       - name: Run Tests
         run: |
-          docker-compose run backend poetry run pytest --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
+          docker container exec back poetry run pytest --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
