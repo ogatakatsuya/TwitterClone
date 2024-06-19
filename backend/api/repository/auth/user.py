@@ -34,10 +34,10 @@ async def get_user(db, username: str):
     return user
 
 async def get_password(db, user_id):
-    password = await db.scalar(select(Password).where(Password.user_id == user_id))
+    password = await db.scalar(select(Password.password).where(Password.user_id == user_id))
     if password is None:
         raise HTTPException(status_code=404, detail="Password not found")
-    return password.password
+    return password
 
 async def authenticate_user(db, username: str, password: str):
     user = await get_user(db, username)
