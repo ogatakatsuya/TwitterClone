@@ -13,6 +13,7 @@ import {
     StackDivider,
     Stack,
 } from '@chakra-ui/react'
+
 import { MdExpandMore } from "react-icons/md";
 
 const Post = ({ user_id }) => {
