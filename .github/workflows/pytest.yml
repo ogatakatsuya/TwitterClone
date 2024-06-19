@@ -15,7 +15,7 @@ jobs:
         run: |
           docker-compose build
           docker-compose up -d
-          docker container exec -it back poetry run pytest
+          docker container exec back poetry run pytest
       
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
