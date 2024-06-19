@@ -15,7 +15,7 @@ jobs:
         run: |
           docker-compose build
           docker-compose up -d
-          docker-compose run backend poetry run pytest --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
+          docker container exec -it back poetry run pytest --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
       
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
