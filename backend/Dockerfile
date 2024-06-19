@@ -2,14 +2,13 @@ FROM python:3.10
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
+WORKDIR /app/backend
 
 RUN pip install poetry
 
 COPY ./pyproject.toml* ./poetry.lock* ./
 
 RUN poetry config virtualenvs.in-project true
-RUN poetry config virtualenvs.create false
 
 RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
 
