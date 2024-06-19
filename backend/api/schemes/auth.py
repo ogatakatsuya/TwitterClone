@@ -26,3 +26,7 @@ class TokenData(BaseModel):
     
 class AccessToken(BaseModel):
     access_token: str
+    
+class PasswordCreate(BaseModel):
+    user_id: int
+    password: str

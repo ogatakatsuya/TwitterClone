@@ -73,18 +73,20 @@ async def get_current_user_id(db: AsyncSession, token: str = Depends(oauth2_sche
         raise credentials_exception
     return user_id
 
-async def create_user(db: AsyncSession, user_create: auth_schema.UserCreate) -> auth_model.User:
+async def create_user(db: AsyncSession, user_name: str) -> auth_model.User:
     user = auth_model.User(
-        name = user_create.user_name
+        name = user_name
     )
     db.add(user)
     await db.commit()
     await db.refresh(user)
     
-    hashed_password = get_password_hash(user_create.password)
-    password = auth_model.Password(password=hashed_password, user_id=user.id)
-    
-    db.add(password)
-    await db.commit()
-    
     return user
+
+async def create_password(db: AsyncSession, password_create: auth_schema.PasswordCreate):
+    
+    hashed_password = get_password_hash(password_create.password)
+    password = auth_model.Password(password=hashed_password, user_id=password_create.user_id)
+    db.add(password)
+    await db.flush()
+    return password
