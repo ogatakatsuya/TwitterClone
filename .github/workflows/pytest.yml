@@ -9,8 +9,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4ackend
-          ls
+        uses: actions/checkout@v4
 
       - name: Build Docker images
         run: docker-compose build
