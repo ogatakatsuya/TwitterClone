@@ -2,7 +2,7 @@ FROM python:3.10
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
+WORKDIR /app/backend
 
 RUN pip install poetry
 
