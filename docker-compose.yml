@@ -4,7 +4,7 @@ services:
     container_name: front
     build:
       dockerfile: ./frontend/Dockerfile
-      context: .
+      context: ./frontend
     ports:
       - "3000:3000"
     volumes:
@@ -20,7 +20,7 @@ services:
     container_name: back
     build:
       dockerfile: ./backend/Dockerfile
-      context: .
+      context: ./backend
     volumes:
       - ./backend/dockervenv:/src/.venv
       - type: bind
