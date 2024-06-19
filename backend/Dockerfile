@@ -10,6 +10,6 @@ COPY ./backend/pyproject.toml ./backend/poetry.lock /app/
 
 RUN poetry config virtualenvs.in-project true
 
-RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
+RUN poetry install --no-dev
 
 ENTRYPOINT ["poetry", "run", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--reload"]
