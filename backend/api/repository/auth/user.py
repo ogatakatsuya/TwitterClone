@@ -10,9 +10,9 @@ from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-import api.models.models as auth_model
-import api.schemes.auth as auth_schema
-from api.models.models import User, Password
+import models.models as auth_model
+import schemes.auth as auth_schema
+from models.models import User, Password
 
 SECRET_KEY = secrets.token_hex(32)
 ALGORITHM = "HS256"

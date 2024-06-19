@@ -25,9 +25,6 @@ services:
       - type: bind
         source: ./backend
         target: /app
-    working_dir: /app/api
-    environment:
-      - PYTHONPATH=/app/api
     ports:
       - 8000:8000
   
