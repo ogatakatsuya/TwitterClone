@@ -14,7 +14,7 @@ jobs:
       - name: Run Tests
         run: |
           docker-compose build
-          docker-compose up
+          docker-compose up -d
           docker container exec back poetry run pytest
       
       - name: Pytest coverage comment
