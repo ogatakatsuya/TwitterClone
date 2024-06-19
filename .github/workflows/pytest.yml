@@ -1,5 +1,5 @@
 on:
-    pull_request:
+    push:
   
 permissions: write-all
 
@@ -15,7 +15,7 @@ jobs:
         run: |
           docker-compose build
           docker-compose up -d
-          docker-compose run back pytest --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
+          docker-compose run backend pytest --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
