@@ -6,12 +6,11 @@ WORKDIR /app
 
 RUN pip install poetry
 
-COPY ./backend/pyproject.toml ./backend/poetry.lock /app/
+COPY backend/pyproject.toml backend/poetry.lock ./
 
-RUN poetry config virtualenvs.in-project true
+ENV PYTHONPATH=/app/api
 
-RUN poetry install --no-dev
+RUN poetry export -f requirements.txt --output requirements.txt
+RUN pip install -r requirements.txt
 
-COPY . /app
-
-ENTRYPOINT ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--reload"]
+ENTRYPOINT ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
