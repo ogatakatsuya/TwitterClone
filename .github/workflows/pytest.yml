@@ -1,6 +1,6 @@
 on:
-    push:
-  
+  push:
+
 permissions: write-all
 
 jobs:
@@ -11,10 +11,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build Docker images
+        run: docker-compose build
+
+      - name: Start Docker containers
+        run: docker-compose up -d
+
+      - name: List files in the backend directory
+        run: docker-compose run backend ls -la
+
+      - name: List files in the backend .venv/bin directory
+        run: docker-compose run backend ls -la .venv/bin
+
       - name: Run Tests
         run: |
-          docker-compose build
-          docker-compose up -d
           docker-compose run backend poetry run pytest --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
