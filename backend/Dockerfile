@@ -6,16 +6,9 @@ WORKDIR /app
 
 RUN pip install poetry
 
-# 依存関係ファイルを最初にコピーして Docker キャッシュを活用する
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml* poetry.lock* ./
 
 RUN poetry config virtualenvs.in-project true
-RUN poetry install --no-root
+RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
 
-# 残りのアプリケーションファイルをコピー
-COPY . .
-
-ENV PYTHONPATH=/app/api
-
-ENTRYPOINT ["poetry", "run", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
+ENTRYPOINT ["poetry", "run", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--reload"]
