@@ -4,8 +4,8 @@ import {
     Stack,
     StackDivider
 } from "@chakra-ui/react";
+
 import MenuBar from "../../home/_components/MenuBar";
-import SearchBar from "../../home/_components/SearchBar";
 import ProfileInfo from "./_components/ProfileInfo"
 import Post from "./_components/Post"
 import Bar from "./_components/Bar";

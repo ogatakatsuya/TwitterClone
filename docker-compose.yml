@@ -22,7 +22,6 @@ services:
       dockerfile: ./backend/Dockerfile
       context: .
     volumes:
-      - ./backend/dockervenv:/src/.venv
       - type: bind
         source: ./backend
         target: /app
