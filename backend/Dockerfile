@@ -6,12 +6,13 @@ WORKDIR /app
 
 RUN pip install poetry
 
-COPY pyproject.toml* poetry.lock* ./app/
+COPY pyproject.toml* poetry.lock* ./
 
 ENV PYTHONPATH=/app/api
 
 RUN poetry config virtualenvs.in-project true
-RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
-RUN poetry install uvicorn
+RUN poetry install --no-root
 
-ENTRYPOINT ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0","--port", "8000", "--reload"]
+COPY . .
+
+ENTRYPOINT ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
