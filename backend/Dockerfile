@@ -6,7 +6,7 @@ WORKDIR /app
 
 RUN pip install poetry
 
-COPY pyproject.toml* poetry.lock* ./
+COPY ./ ./
 
 ENV PYTHONPATH=/app/api
 
