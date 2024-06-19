@@ -20,13 +20,12 @@ services:
     container_name: back
     build:
       dockerfile: ./backend/Dockerfile
-      context: ./backend
+      context: ./
     volumes:
       - ./backend/dockervenv:/src/.venv
       - type: bind
         source: ./backend
         target: /app
-    working_dir: /app/api
     environment:
       - PYTHONPATH=/app/api
     ports:
