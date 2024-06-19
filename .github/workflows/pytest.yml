@@ -11,14 +11,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: List files in the backend directory
+        run: ls
+
       - name: Build Docker images
         run: docker-compose build
 
       - name: Start Docker containers
         run: docker-compose up -d
-
-      - name: List files in the backend directory
-        run: docker-compose run backend ls -la
 
       - name: List files in the backend .venv/bin directory
         run: docker-compose run backend ls -la .venv/bin
