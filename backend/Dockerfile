@@ -6,7 +6,7 @@ WORKDIR /app
 
 RUN pip install poetry
 
-COPY ./pyproject.toml* ./poetry.lock* ./
+COPY ./backend/pyproject.toml ./backend/poetry.lock /app/
 
 RUN poetry config virtualenvs.in-project true
 
