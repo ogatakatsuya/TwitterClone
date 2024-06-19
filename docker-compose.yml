@@ -4,7 +4,7 @@ services:
     container_name: front
     build:
       dockerfile: ./frontend/Dockerfile
-      context: ./
+      context: .
     ports:
       - "3000:3000"
     volumes:
@@ -20,12 +20,13 @@ services:
     container_name: back
     build:
       dockerfile: ./backend/Dockerfile
-      context: ./
+      context: .
     volumes:
-      - ./backend/dockervenv:/src/.venv
       - type: bind
         source: ./backend
         target: /app
+      - ./backend/pyproject.toml:/app/pyproject.toml  # Mount the specific file
+    working_dir: /app/api
     environment:
       - PYTHONPATH=/app/api
     ports:
@@ -34,7 +35,7 @@ services:
   db:
     container_name: db
     image: mysql:8.0
-    platform: linux/x86_64
+    platform: linux/x86_64  # Only required for M1 Mac
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: 'data'
