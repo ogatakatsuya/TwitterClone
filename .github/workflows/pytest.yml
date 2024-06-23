@@ -16,7 +16,7 @@ jobs:
           docker-compose build
           docker-compose up -d
           docker container exec back poetry install --no-root
-          docker container exec back poetry run pytest --asyncio-mode=auto --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
+          docker container exec back poetry run pytest --asyncio-mode=auto
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
