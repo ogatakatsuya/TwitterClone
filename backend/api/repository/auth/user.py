@@ -78,9 +78,7 @@ async def create_user(db: AsyncSession, user_name: str) -> auth_model.User:
         name = user_name
     )
     db.add(user)
-    await db.commit()
-    await db.refresh(user)
-    
+    await db.flush()
     return user
 
 async def create_password(db: AsyncSession, password_create: auth_schema.PasswordCreate):
