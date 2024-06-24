@@ -28,13 +28,19 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 async def get_user(db, username: str):
-    user = await db.scalar(select(User).where(User.name == username))
+    user = await db.scalar(
+        select(User)
+        .where(User.name == username)
+    )
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
 async def get_password(db, user_id):
-    password = await db.scalar(select(Password.password).where(Password.user_id == user_id))
+    password = await db.scalar(
+        select(Password.password)
+        .where(Password.user_id == user_id)
+    )
     if password is None:
         raise HTTPException(status_code=404, detail="Password not found")
     return password

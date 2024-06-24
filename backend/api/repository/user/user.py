@@ -1,10 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from api.models.models import User
-from api.schemes.profile import NewProfile
+from models.models import User
+from schemes.profile import NewProfile
 
-from datetime import datetime
 
 async def get_profile(db: AsyncSession, user_id: int):
     result = await db.execute(select(User).where(User.id == user_id))

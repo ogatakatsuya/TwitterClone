@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 
-from api.models.models import Follow
-from api.schemes.follow import FollowBody
+from models.models import Follow
+from schemes.follow import FollowBody
 
 async def follow(db: AsyncSession, follow_body: FollowBody):
     try:

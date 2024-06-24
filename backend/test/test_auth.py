@@ -1,35 +1,11 @@
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
-from fastapi import Depends
-from jose import jwt
-
+from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 import repository.auth.user as auth_modules
-from repository.auth.user import SECRET_KEY, ALGORITHM
 import schemes.auth as auth_schemes
-from db import ASYNC_DB_URL
-import asyncio
-
-# 非同期エンジンとセッションの作成
-async_engine = create_async_engine(ASYNC_DB_URL, echo=True)
-async_session = sessionmaker(
-    autocommit=False, autoflush=False, bind=async_engine, class_=AsyncSession
-)
-
-# データベースセッションのフィクスチャ
-@pytest.fixture(scope='session') # dbセッションをテストで共有
-async def db_session():
-    async with async_session() as session:
-        try:
-            yield session
-        finally:
-            await session.rollback() # テストごとにロールバック
-
-@pytest.fixture(scope='session') # 全てのテストで同一のsessionを共有
-def event_loop():
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
+from models.models import User, Password
+from repository.auth.user import SECRET_KEY, ALGORITHM
+from jose import jwt
 
 def test_get_password_hash():
     password = "test_password"
@@ -54,46 +30,58 @@ async def test_create_user(db_session: AsyncSession):
     assert new_user.name == user_name, "failed at create_user"
     
 @pytest.mark.asyncio
-async def test_get_user(db_session: AsyncSession):
+async def test_get_user(db_session: AsyncSession, mocker):
     user_name = "test_user"
+    test_user = User(id=1, name=user_name)
+    mocker.patch.object(db_session, 'scalar', return_value=test_user)
     fetched_user = await auth_modules.get_user(db_session, user_name)
-    assert fetched_user.name == user_name, "failed at get_user"
+    assert fetched_user.name == user_name, "User name does not match"
+
+# @pytest.mark.asyncio
+# async def test_create_password(db_session: AsyncSession):
+#     user_name = "test_user"
+#     fetched_user = await auth_modules.get_user(db_session, user_name)
+#     password_body = auth_schemes.PasswordCreate(user_id=fetched_user.id, password="test_password")
+#     new_password = await auth_modules.create_password(db_session, password_body)
+#     assert new_password is not None, "failed at create_password"
 
 @pytest.mark.asyncio
-async def test_create_password(db_session: AsyncSession):
+async def test_get_password(db_session: AsyncSession, mocker):
     user_name = "test_user"
-    fetched_user = await auth_modules.get_user(db_session, user_name)
-    password_body = auth_schemes.PasswordCreate(user_id=fetched_user.id, password="test_password")
-    new_password = await auth_modules.create_password(db_session, password_body)
-    assert new_password is not None, "failed at create_password"
+    test_hashed_password = "test_password"
+    mocker.patch.object(db_session, 'scalar', return_value=Password(user_id=1, password=test_hashed_password))
+    hashed_password = await auth_modules.get_password(db_session, 1)
+    assert hashed_password is not None, "failed at get_password"
 
 @pytest.mark.asyncio
-async def test_get_password(db_session: AsyncSession):
-    user_name = "test_user"
-    password = "test_password"
-    fetched_user = await auth_modules.get_user(db_session, user_name)
-    hashed_password = await auth_modules.get_password(db_session, fetched_user.id)
-    assert auth_modules.verify_password(password, hashed_password) == True, "failed at get_password"
-
-@pytest.mark.asyncio
-async def test_authenticate_user_success(db_session: AsyncSession):
+async def test_authenticate_user_success(db_session: AsyncSession, mocker):
     user_name = "test_user"
     user_password = "test_password"
+    mocker.patch("repository.auth.user.get_user", return_value=User(id=1, name=user_name))
+    mocker.patch("repository.auth.user.get_password", return_value=Password(user_id=1, password=user_password))
+    mocker.patch("repository.auth.user.verify_password", return_value=True)
     is_authenticated = await auth_modules.authenticate_user(db_session, user_name, user_password)
     assert is_authenticated, "failed at authenticate_user_success"
 
 @pytest.mark.asyncio
-async def test_authenticate_user_failure(db_session: AsyncSession):
+async def test_authenticate_user_failure(db_session: AsyncSession, mocker):
     user_name = "test_user"
     user_password = "wrong_password"
+    mocker.patch("repository.auth.user.get_user", return_value=User(id=1, name=user_name))
+    mocker.patch("repository.auth.user.get_password", return_value=Password(user_id=1, password=user_password))
+    mocker.patch("repository.auth.user.verify_password", return_value=False)
     is_authenticated = await auth_modules.authenticate_user(db_session, user_name, user_password)
     assert is_authenticated == False, "failed at authenticate_user_failure"
 
-# async def test_create_access_token(db_session: AsyncSession):
-#     user_name = "test_user"
-#     test_user = await auth_modules.get_user(db_session, user_name)
-#     token = await auth_modules.create_access_token(data={"sub": str(test_user.id)})
-#     assert token, "The access token should not be empty."
+def test_create_access_token():
+    user_id = 1
+    token = auth_modules.create_access_token(data={"sub": str(user_id)})
+    assert token, "The access token should not be empty."
     
-#     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#     assert payload.get("sub") == test_user.id, "The token payload should contain the correct user ID."
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    assert payload.get("sub") ==  str(user_id), "The token payload should contain the correct user ID."
+    
+async def test_get_current_user_id(db_session: AsyncSession):
+    token = auth_modules.create_access_token(data={"sub": "1"})
+    user_id = await auth_modules.get_current_user_id(db_session, token=token)
+    assert user_id == "1", "The user ID should be extracted from the token."

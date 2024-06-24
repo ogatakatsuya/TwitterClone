@@ -3,8 +3,8 @@ from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
-from api.models.models import Like
-from api.schemes.likes import LikeInfo
+from models.models import Like
+from schemes.likes import LikeInfo
 
 async def get_like_status(
     db: AsyncSession, like_body: LikeInfo
