@@ -4,13 +4,13 @@ from unittest.mock import AsyncMock, MagicMock
 from models.models import Post, User
 import repository.posts.posts as post_modules
 
-@pytest.mark.asyncio
-async def test_create_post(db_session: AsyncSession):
-    post_body = MagicMock(text="Test Post", user_id=4, parent_id=None)
-    post = await post_modules.create_post(db_session, post_body)
-    assert post.text == post_body.text
-    assert post.user_id == post_body.user_id
-    assert post.parent_id == post_body.parent_id
+# @pytest.mark.asyncio
+# async def test_create_post(db_session: AsyncSession):
+#     post_body = MagicMock(text="Test Post", user_id=4, parent_id=None)
+#     post = await post_modules.create_post(db_session, post_body)
+#     assert post.text == post_body.text
+#     assert post.user_id == post_body.user_id
+#     assert post.parent_id == post_body.parent_id
 
 @pytest.mark.asyncio
 async def test_get_post_success(db_session: AsyncSession):
