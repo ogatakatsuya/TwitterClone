@@ -11,13 +11,13 @@ async_session = sessionmaker(
 )
 
 # データベースセッションのフィクスチャ
-@pytest.fixture(scope='function') # dbセッションをテストで共有
+@pytest.fixture() # dbセッションをテストごとに生成・ロールバック・クローズ
 async def db_session():
     async with async_session() as session:
         try:
             yield session
         finally:
-            await session.rollback() # テストが終わったらロールバック
+            await session.rollback()
             await session.close()
 
 @pytest.fixture(scope='session') # 全てのテストで同一のsessionを共有
