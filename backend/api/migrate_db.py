@@ -1,11 +1,7 @@
 from sqlalchemy import create_engine
-import sys
-import os
+from models.models import Base
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from api.models.models import Base
-
-DB_URL = "mysql+pymysql://root@db:3306/data?charset=utf8"
+DB_URL = "mysql+pymysql://root:rootpassword@db:3306/data?charset=utf8"
 engine = create_engine(DB_URL, echo=True)
 
 
