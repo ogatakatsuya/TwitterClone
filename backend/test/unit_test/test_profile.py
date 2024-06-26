@@ -7,9 +7,10 @@ from schemes.profile import NewProfile
 from models.models import User
 
 @pytest.mark.asyncio
-async def test_get_profile(db_session: AsyncSession):
+async def test_get_profile_GetProfile_ReturnProfile(db_session: AsyncSession):
     mock_user = User(id=1, nickname="test_nickname", biography="test_biography", birth_day="2000-01-01")
     db_session.execute = AsyncMock(return_value=MagicMock(scalars=MagicMock(return_value=MagicMock(first=MagicMock(return_value=mock_user)))))
+    
     profile = await profile_modules.get_profile(db_session, 1)
     
     assert profile.id == mock_user.id

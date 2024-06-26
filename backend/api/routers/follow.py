@@ -89,13 +89,11 @@ async def find_follow(
     follow_id: int,
     db: AsyncSession = Depends(get_db),
     access_token: str | None = Cookie(default=None)
-):
+) -> bool:
     user_id = await get_current_user_id(db, access_token)
     follow_body = FollowBody(
         user_id = user_id,
         follow_id = follow_id
     )
-    follow = await is_follow(db, follow_body)
-    if follow:
-        return True
-    return False
+    is_follow = await is_follow(db, follow_body)
+    return is_follow
