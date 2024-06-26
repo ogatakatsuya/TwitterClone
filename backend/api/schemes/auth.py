@@ -3,8 +3,8 @@ from pydantic import BaseModel, Field
 from datetime import datetime
     
 class UserCreate(BaseModel):
-    user_name: Optional[str] = Field(None, example="user_name")
-    password: Optional[str] = Field(None, example="password")
+    user_name: Optional[str]
+    password: Optional[str]
     
 class UserCreateResponse(BaseModel):
     id: int
@@ -26,3 +26,7 @@ class TokenData(BaseModel):
     
 class AccessToken(BaseModel):
     access_token: str
+    
+class PasswordCreate(BaseModel):
+    user_id: int
+    password: str

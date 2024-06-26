@@ -10,9 +10,9 @@ from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-import api.models.models as auth_model
-import api.schemes.auth as auth_schema
-from api.models.models import User, Password
+import models.models as auth_model
+import schemes.auth as auth_schema
+from models.models import User, Password
 
 SECRET_KEY = secrets.token_hex(32)
 ALGORITHM = "HS256"
@@ -28,16 +28,22 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 async def get_user(db, username: str):
-    user = await db.scalar(select(User).where(User.name == username))
+    user = await db.scalar(
+        select(User)
+        .where(User.name == username)
+    )
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
 async def get_password(db, user_id):
-    password = await db.scalar(select(Password).where(Password.user_id == user_id))
+    password = await db.scalar(
+        select(Password.password)
+        .where(Password.user_id == user_id)
+    )
     if password is None:
         raise HTTPException(status_code=404, detail="Password not found")
-    return password.password
+    return password
 
 async def authenticate_user(db, username: str, password: str):
     user = await get_user(db, username)
@@ -46,7 +52,7 @@ async def authenticate_user(db, username: str, password: str):
         return False
     if not verify_password(password, user_password): # passwordが入力されたパスワードでuser_passwordがdbから取ってきた正しいパスワード
         return False
-    return user
+    return True
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
@@ -73,18 +79,18 @@ async def get_current_user_id(db: AsyncSession, token: str = Depends(oauth2_sche
         raise credentials_exception
     return user_id
 
-async def create_user(db: AsyncSession, user_create: auth_schema.UserCreate) -> auth_model.User:
+async def create_user(db: AsyncSession, user_name: str) -> auth_model.User:
     user = auth_model.User(
-        name = user_create.user_name
+        name = user_name
     )
     db.add(user)
-    await db.commit()
-    await db.refresh(user)
-    
-    hashed_password = get_password_hash(user_create.password)
-    password = auth_model.Password(password=hashed_password, user_id=user.id)
-    
-    db.add(password)
-    await db.commit()
-    
+    await db.flush()
     return user
+
+async def create_password(db: AsyncSession, password_create: auth_schema.PasswordCreate):
+    
+    hashed_password = get_password_hash(password_create.password)
+    password = auth_model.Password(password=hashed_password, user_id=password_create.user_id)
+    db.add(password)
+    await db.flush()
+    return password

@@ -16,9 +16,18 @@ router = APIRouter()
 async def register_new_account(
     auth_body : auth_schema.UserCreate, db: AsyncSession = Depends(get_db)
 ):
-    success = await auth_cruds.create_user(db, auth_body)
-    if not success:
-        raise HTTPException(status_code=404, detail="Register user failed")
+    new_user = await auth_cruds.create_user(db, auth_body.user_name)
+    await db.commit()
+    await db.refresh(new_user)
+    if not new_user:
+        raise HTTPException(status_code=500, detail="Register user failed")
+    
+    password_body = auth_schema.PasswordCreate(user_id=new_user.id, password=auth_body.password)
+    new_password = await auth_cruds.create_password(db, password_body)
+    await db.commit()
+    await db.refresh(new_password)
+    if not new_password:
+        raise HTTPException(status_code=500, detail="Register password failed")
     return {"message" : "user created."}
 
 @router.post("/auth/login")

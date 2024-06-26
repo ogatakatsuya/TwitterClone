@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 
-from api.models.models import Follow
-from api.schemes.follow import FollowBody
+from models.models import Follow
+from schemes.follow import FollowBody
 
 async def follow(db: AsyncSession, follow_body: FollowBody):
     try:
@@ -14,6 +14,7 @@ async def follow(db: AsyncSession, follow_body: FollowBody):
         )
         db.add(follow_create)
         await db.flush()
+        return follow_create
     
     except IntegrityError as sqlalchemy_error:
         db.rollback()
@@ -54,4 +55,6 @@ async def is_follow(db: AsyncSession, follow_body: FollowBody):
         .where(Follow.followed_id == follow_body.follow_id)
     )
     follow = result.scalar_one_or_none()
-    return follow
+    if follow is None:
+        return False
+    return True
