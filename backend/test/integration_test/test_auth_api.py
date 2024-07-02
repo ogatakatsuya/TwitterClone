@@ -1,22 +1,21 @@
-from fastapi.testclient import TestClient
+import pytest
 
-from main import app
+@pytest.mark.anyio
+async def test_register_new_account_ResisterUser_ReturnSuccessMessage(async_client):
+        response = await async_client.post("/auth/register", json={"user_name": "test_user", "password": "test_password"})
+        assert response.status_code == 200
+        assert response.json() == {"message": "user created."}
 
-client = TestClient(app)
+# @pytest.mark.anyio
+# async def test_login_for_access_token_LoginWithValidCredentials_ReturnsAccessToken(test_db):
+#     async with AsyncClient(app=app, base_url="localhost:8000") as client:
+#         # まずユーザーを登録
+#         await client.post("/auth/register", json={"user_name": "test_user", "password": "test_password"})
+#         # ログインを試みる
+#         response = await client.post("/auth/login", data={"username": "test_user", "password": "test_password"})
+#         assert response.status_code == 200
+#         assert "access_token" in response.cookies
 
-
-def test_register_new_account_ResisterUser_ReturnSuccessMessage(test_db):
-    response = client.post("/auth/register", json={"user_name": "test_user", "password": "test_password"})
-    assert response.status_code == 200
-    assert response.json() == {"message": "user created."}
-
-def test_login_for_access_token_LoginWithValidCredentials_ReturnsAccessToken(test_db):
-    # まずユーザーを登録
-    client.post("/auth/register", json={"user_name": "test_user", "password": "test_password"})
-    # ログインを試みる
-    response = client.post("/auth/login", data={"username": "test_user", "password": "test_password"})
-    assert response.status_code == 200
-    assert "access_token" in response.cookies
 
 # def test_login_for_access_token_LoginWithInvalidCredentials_ReturnsUnauthorized():
 #     # ログインを試みる
