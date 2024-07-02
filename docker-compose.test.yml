@@ -14,11 +14,11 @@ services:
     ports:
       - 33305:3305
     networks:
-      - yuzuriha_backend_network
+      - test_db_network
 
 volumes:
   mysql_test_data:
 
 networks:
-  yuzuriha_backend_network:
+  test_db_network:
     external: true

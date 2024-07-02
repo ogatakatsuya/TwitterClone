@@ -28,7 +28,7 @@ services:
     ports:
       - 8000:8000
     networks:
-      - yuzuriha_backend_network
+      - test_db_network
 
   db:
     container_name: db
@@ -49,5 +49,5 @@ volumes:
   node_modules:
 
 networks:
-  yuzuriha_backend_network:
+  test_db_network:
     external: true

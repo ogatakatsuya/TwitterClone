@@ -14,6 +14,7 @@ jobs:
 
       - name: Run Tests
         run: |
+          docker network create test_db_network
           docker-compose build
           docker-compose up -d
           docker container exec back poetry install --no-root
