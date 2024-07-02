@@ -1,5 +1,10 @@
-on: [pull_request]
-  
+name: Run APITests on Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
 permissions:
   contents: read
   pull-requests: write
@@ -12,10 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build and Start Services
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml build
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
+          sleep 20
+
       - name: Run Tests
         run: |
-          docker-compose build
-          docker-compose up -d
           docker container exec back poetry install --no-root
           docker container exec back poetry run python -m migrate_test_db
           docker container exec back poetry run pytest test/integration_test --asyncio-mode=auto --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt

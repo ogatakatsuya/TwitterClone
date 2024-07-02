@@ -5,12 +5,12 @@ from main import app
 client = TestClient(app)
 
 
-def test_register_new_account_ResisterUser_ReturnSuccessMessage():
+def test_register_new_account_ResisterUser_ReturnSuccessMessage(test_db):
     response = client.post("/auth/register", json={"user_name": "test_user", "password": "test_password"})
     assert response.status_code == 200
     assert response.json() == {"message": "user created."}
 
-def test_login_for_access_token_LoginWithValidCredentials_ReturnsAccessToken():
+def test_login_for_access_token_LoginWithValidCredentials_ReturnsAccessToken(test_db):
     # まずユーザーを登録
     client.post("/auth/register", json={"user_name": "test_user", "password": "test_password"})
     # ログインを試みる
