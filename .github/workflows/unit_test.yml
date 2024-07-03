@@ -12,11 +12,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Tests
+      - name: Build and Start Services
         run: |
-          docker network create test_db_network
           docker-compose build
           docker-compose up -d
+          sleep 20
+
+      - name: Run Tests
+        run: |
           docker container exec back poetry install --no-root
           docker container exec back poetry run python -m migrate_db
           docker container exec back poetry run pytest test/unit_test --asyncio-mode=auto --cov --cov-branch --cov-report=term-missing --junitxml=pytest.xml test | tee pytest-coverage.txt
