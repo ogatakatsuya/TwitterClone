@@ -8,7 +8,7 @@ const ProfileButton = () => {
     const router = useRouter();
 
     const redirectToProfile = () => {
-        router.push(`/profile/me`)
+        router.push("/profile/me")
     }
 
     return (

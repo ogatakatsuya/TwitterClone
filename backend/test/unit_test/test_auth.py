@@ -59,25 +59,30 @@ async def test_get_password_GetUserPassword_ReturnPassword(db_session: AsyncSess
     mocker.patch.object(db_session, 'scalar', return_value=Password(user_id=1, password=test_hashed_password))
     hashed_password = await auth_modules.get_password(db_session, 1)
     assert hashed_password is not None, "failed at get_password"
-
+    
 @pytest.mark.asyncio
-@pytest.mark.parametrize(
-    ["test_input", "expected"],
-    [
-        pytest.param({"user_name": "test_user", "user_password": "test_password"}, True),
-        pytest.param({"user_name": "test_user", "user_password": "wrong_password"}, False)
-    ]
-)
-async def test_authenticate_user_AuthenticateSingleUser(db_session: AsyncSession, mocker, test_input, expected):
-    user_name = test_input["user_name"]
-    user_password = test_input["user_password"]
+async def test_authenticate_user_AuthenticateSingleUser_ReturnUser(db_session: AsyncSession, mocker):
+    user_name = "test_user"
+    user_password = "test_password"
     mocker.patch("repository.auth.user.get_user", return_value=User(id=1, name=user_name))
     mocker.patch("repository.auth.user.get_password", return_value=Password(user_id=1, password=user_password))
-    mocker.patch("repository.auth.user.verify_password", return_value=expected)
+    mocker.patch("repository.auth.user.verify_password", return_value=True)
     
     is_authenticated = await auth_modules.authenticate_user(db_session, user_name, user_password)
     
-    assert is_authenticated == expected, "failed at authenticate_user"
+    assert is_authenticated is not False, "failed at authenticate_user"
+
+@pytest.mark.asyncio
+async def test_authenticate_user_AuthenticateSingleUserWithWrongPassword_ReturnFalse(db_session: AsyncSession, mocker):
+    user_name = "test_user"
+    user_password = "wrong_password"
+    mocker.patch("repository.auth.user.get_user", return_value=User(id=1, name=user_name))
+    mocker.patch("repository.auth.user.get_password", return_value=Password(user_id=1, password="test_password"))
+    mocker.patch("repository.auth.user.verify_password", return_value=False)
+    
+    is_authenticated = await auth_modules.authenticate_user(db_session, user_name, user_password)
+    
+    assert is_authenticated is False, "failed at authenticate_user"
 
 def test_create_access_token_CreateAccessToken_ReturnAccessToken():
     user_id = 1

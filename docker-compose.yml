@@ -27,11 +27,11 @@ services:
         target: /app
     ports:
       - 8000:8000
-  
+
   db:
     container_name: db
     image: mysql:8.0
-    platform: linux/x86_64  # M1 Macの場合必要
+    platform: linux/x86_64
     environment:
       MYSQL_ROOT_AUTHENTICATION_PLUGIN: 'caching_sha2_password'
       MYSQL_ROOT_PASSWORD: rootpassword
@@ -39,8 +39,11 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - mysql_data:/var/lib/mysql
+      - type: bind
+        source: ./init.sql
+        target: /docker-entrypoint-initdb.d/init.sql
     ports:
-      - 33306:3306  # ホストマシンのポート33306を、docker内のポート3306に接続する
+      - 33306:3306
 
 volumes:
   mysql_data:

@@ -37,7 +37,7 @@ async def edit_own_profile_information(
     await db.commit()
     return {"message": "Successfully edit profile"}
 
-@router.get("/profile/post")
+@router.get("/profile/post") #ログインしているユーザーの投稿の取得
 async def get_own_posts(
     offset: int,
     db: AsyncSession = Depends(get_db),
@@ -47,7 +47,7 @@ async def get_own_posts(
     posts = await get_posts_by_user_id(db, user_id)
     return posts
 
-@router.get("/profile/post/{user_id}")
+@router.get("/profile/post/{user_id}") #ログインしているユーザー以外のユーザーの投稿の取得
 async def get_personal_posts(
     user_id: int,
     offset: int,

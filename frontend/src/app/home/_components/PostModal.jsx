@@ -72,7 +72,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
                     },
                   })}
                 />
-                <FormErrorMessage>{errors.text && errors.text.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.text?.message}</FormErrorMessage>
               </FormControl>
               {submitError && (
                 <Text color="red.500" mt={2}>
@@ -91,7 +91,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
               </Flex>
             </form>
           </ModalBody>
-          <ModalFooter></ModalFooter>
+          <ModalFooter/>
         </ModalContent>
       </Modal>
     </>

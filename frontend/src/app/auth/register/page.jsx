@@ -91,7 +91,7 @@ const Register = () => {
                 })}
                 />
                 <FormErrorMessage>
-                {errors.userName && errors.userName.message}
+                {errors.userName?.message}
                 </FormErrorMessage>
             </FormControl>
             <FormControl
@@ -126,7 +126,7 @@ const Register = () => {
                 </InputRightElement>
                 </InputGroup>
                 <FormErrorMessage>
-                {errors.password && errors.password.message}
+                {errors.password?.message}
                 </FormErrorMessage>
             </FormControl>
             <Stack pt={6}>

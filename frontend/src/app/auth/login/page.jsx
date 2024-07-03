@@ -92,7 +92,7 @@ const Login = () => {
                 })}
                 />
                 <FormErrorMessage>
-                {errors.userName && errors.userName.message}
+                {errors.userName?.message}
                 </FormErrorMessage>
             </FormControl>
             <FormControl
@@ -117,7 +117,7 @@ const Login = () => {
                 />
                 </InputGroup>
                 <FormErrorMessage>
-                {errors.password && errors.password.message}
+                {errors.password?.message}
                 </FormErrorMessage>
             </FormControl>
             <Stack pt={6}>
