@@ -1,11 +1,9 @@
-from fastapi import Depends, APIRouter, HTTPException, Cookie, Query
+from fastapi import Depends, APIRouter, HTTPException, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.repository.posts.posts as post_cruds
 from api.db import get_db
 from api.repository.auth.user import get_current_user_id
-
-from typing import List
 import api.schemes.posts as post_schema
 
 router = APIRouter()

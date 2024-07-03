@@ -1,4 +1,9 @@
-on: [pull_request]
+name: Run Unit Tests on Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
   
 permissions:
   contents: read

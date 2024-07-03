@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from psycopg2 import errors as psycopg2_errors
 
 from api.db import get_db
-from api.schemes.follow import CreateFollow, FollowBody
+from api.schemes.follow import FollowBody
 from api.repository.follow.follow import follow, count_followed_users, count_following_users, delete_follow, is_follow
 from api.repository.auth.user import get_current_user_id
 
@@ -46,9 +46,9 @@ async def follow_user(
         return {"message": "successfully followed"}
     
     except psycopg2_errors.UniqueViolation as e:
-        raise HTTPException(status_code=400, detail="can't follow the same user.")
+        raise HTTPException(status_code=400, detail=f"can't follow the same user.: {str(e)}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
     
 @router.delete("/follow/{follow_id}")
 async def remove_follow(

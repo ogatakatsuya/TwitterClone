@@ -1,4 +1,4 @@
-from typing import List, Dict, Union
+from typing import Dict
 
 from fastapi import APIRouter, Cookie, Depends
 from sqlalchemy.ext.asyncio import AsyncSession

@@ -1,4 +1,4 @@
-name: Run APITests on Pull Request
+name: Run API Tests on Pull Request
 
 on:
   pull_request:
