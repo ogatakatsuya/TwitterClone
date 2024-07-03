@@ -38,7 +38,7 @@ async def get_posts(db: AsyncSession, offset: int, limit: int):
     result = await db.execute(
         select(Post, User.name)
         .join(User, Post.user_id == User.id)
-        .where(Post.parent_id == None)
+        .where(Post.parent_id is None)
         .order_by(Post.id.desc())
         .limit(limit)
         .offset(offset)
@@ -87,7 +87,7 @@ async def get_posts_by_user_id(db: AsyncSession, user_id: int):
         select(Post, User.name)
         .join(User, Post.user_id == User.id)
         .where(Post.user_id == user_id)
-        .where(Post.parent_id == None)
+        .where(Post.parent_id is None)
     )
     posts_with_users = result.fetchall()
     top_level_posts = []

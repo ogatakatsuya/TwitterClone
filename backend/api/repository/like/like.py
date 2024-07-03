@@ -1,6 +1,7 @@
 from sqlalchemy.future import select
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 
 from models.models import Like
@@ -30,7 +31,7 @@ async def create_like(
     
     try:
         await db.flush()
-    except:
+    except IntegrityError:
         await db.rollback()
         raise HTTPException(status_code=400, detail="User has already liked this post")
     return new_like
