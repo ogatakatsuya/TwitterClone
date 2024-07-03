@@ -1,6 +1,6 @@
 name: biome
 
-on: [pull_request]
+on: [push]
 
 jobs:
   quality:
@@ -13,4 +13,4 @@ jobs:
         with:
           version: latest
       - name: Run Biome
-        run: biome ci .
+        run: biome ci frontend/src/
