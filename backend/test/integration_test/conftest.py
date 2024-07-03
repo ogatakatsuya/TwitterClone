@@ -3,11 +3,15 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker, close_all_sessions
 from models.models import Base
 from main import app
-from db import get_db
-from sqlalchemy.pool import NullPool
+from api.db import get_db
 from httpx import AsyncClient
 
 TEST_DB_URL = "mysql+aiomysql://root:rootpassword@db:3306/test_db?charset=utf8"
+
+class AsyncTestingSession(AsyncSession):
+    def commit(self):
+        self.flush()
+        self.expire_all()
 
 @pytest.fixture(scope="function")
 async def async_client() -> AsyncClient:

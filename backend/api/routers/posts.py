@@ -22,6 +22,7 @@ async def create_post(
     post_body = post_schema.CreatePost(text=post.text, user_id=user_id)
     new_post = await post_cruds.create_post(db, post_body)
     await db.commit()
+    await db.refresh(new_post)
     return {"new_post": new_post}
 
 @router.get("/posts")

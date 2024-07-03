@@ -95,5 +95,5 @@ async def find_follow(
         user_id = user_id,
         follow_id = follow_id
     )
-    is_follow = await is_follow(db, follow_body)
-    return is_follow
+    is_following = await is_follow(db, follow_body)
+    return is_following
