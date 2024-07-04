@@ -33,3 +33,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/hello")
+def hello():
+    return "hello world from fastapi!"
