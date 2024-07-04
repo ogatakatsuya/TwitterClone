@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from models.models import User
-from schemes.profile import NewProfile
+from api.models.models import User
+from api.schemes.profile import NewProfile
 
 
 async def get_profile(db: AsyncSession, user_id: int):

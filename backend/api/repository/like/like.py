@@ -4,8 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 
-from models.models import Like
-from schemes.likes import LikeInfo
+from api.models.models import Like
+from api.schemes.likes import LikeInfo
 
 async def get_like_status(
     db: AsyncSession, like_body: LikeInfo
