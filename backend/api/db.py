@@ -1,7 +1,16 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv
+import os
 
-ASYNC_DB_URL = "mysql+aiomysql://root:rootpassword@db:3306/data?charset=utf8"
+load_dotenv()
+
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+DB_NAME = os.getenv('DB_NAME')
+
+ASYNC_DB_URL = f"mysql+aiomysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:3306/{DB_NAME}?charset=utf8"
 
 async_engine = create_async_engine(ASYNC_DB_URL, echo=True)
 async_session = sessionmaker(

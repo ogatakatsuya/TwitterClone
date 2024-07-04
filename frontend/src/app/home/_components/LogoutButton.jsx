@@ -27,7 +27,7 @@ const LogoutButton = () => {
     return(
         <>
         <Button
-        colorScheme = "red"
+        colorScheme = "blackAlpha"
         onClick = {onClick}
         mt="4"
         >

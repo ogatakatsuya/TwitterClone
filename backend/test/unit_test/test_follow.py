@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.models import Follow
