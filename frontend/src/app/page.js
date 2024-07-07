@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [data, setMessage] = useState("");
   useEffect(() => { //接続確認用
-    fetch("http://localhost:8000/hello")
+    const endpoitUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
+    fetch(`${endpoitUrl}/hello`)
       .then((res) => res.json())
       .then((data) => setMessage(data));
   }, []);
