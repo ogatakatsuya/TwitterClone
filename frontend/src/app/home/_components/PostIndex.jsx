@@ -33,7 +33,7 @@ const PostIndex = () => {
             });
             if (res.ok) {
                 const data = await res.json();
-                if (offset == 0) { //初回表示時はレンダリングが2回行われるため
+                if (offset === 0) { //初回表示時はレンダリングが2回行われるため
                     setPost(data);
                     setOffset(0);
                     console.log(data)
@@ -41,7 +41,7 @@ const PostIndex = () => {
                     setPost((prevPosts) => [...prevPosts, ...data]);
                     console.log(data)
                 }
-                setHasMore( data.length == fetchLimit )
+                setHasMore( data.length === fetchLimit )
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }
