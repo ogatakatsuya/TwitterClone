@@ -16,7 +16,7 @@ export default function Home() {
   }, []);
   return (
     <>
-      <h1>deploy succeeded!</h1>
+      <h1>this is test message to see if the deploy is succeeded or not.</h1>
       <Heading>{data}</Heading> 
       <ToLoginButton />
       <ToRegisterButton />
