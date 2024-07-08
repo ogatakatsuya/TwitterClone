@@ -2,7 +2,7 @@
 
 # Frontend setup
 cd /home/ec2-user/frontend
-npm install
+sudo npm install
 
 # Backend setup
 cd /home/ec2-user/backend
