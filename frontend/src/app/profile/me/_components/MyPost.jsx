@@ -94,7 +94,7 @@ const MyPost = () => {
                                     <Avatar />
                                     <Box ml={3}>
                                         <Text fontSize='md'>
-                                            {item.user_name}
+                                            {item.user_nickname ? item.user_nickname : item.user_name}
                                         </Text>
                                         <Text fontSize='xs'>
                                             {item.created_at}

@@ -21,7 +21,8 @@ async def create_post(
     new_post = await post_cruds.create_post(db, post_body)
     await db.commit()
     await db.refresh(new_post)
-    return {"new_post": new_post}
+    post_with_user_data = await post_cruds.get_post(db, new_post.id)
+    return post_with_user_data
 
 @router.get("/posts")
 async def get_posts(

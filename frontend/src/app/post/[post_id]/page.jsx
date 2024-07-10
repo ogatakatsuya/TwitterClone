@@ -6,7 +6,6 @@ import MenuBar from "../../home/_components/MenuBar";
 import SearchBar from "../../home/_components/SearchBar";
 
 const postDetail = ({ params }) => {
-    
     return(
         <>
         <Container maxW="1000px" mt="10" centerContent>
@@ -14,7 +13,7 @@ const postDetail = ({ params }) => {
                 <MenuBar />
                 <Stack divider={<StackDivider />} spacing='4'>
                     <Post post_id={params.post_id}/>
-                    <Replies post_id={params.post_id} />
+                    <Replies post_id={params.post_id}/>
                 </Stack>
                 <SearchBar />
             </Grid>

@@ -49,7 +49,7 @@ const Post = ({ post_id }) => {
                         <Avatar />
                         <Box ml={3}>
                             <Text fontSize='md'>
-                                {post.user_name}
+                                {post.user_nickname ? post.user_nickname : post.user_name}
                             </Text>
                             <Text fontSize='xs'>
                                 {formatDate(new Date(post.created_at))}
@@ -76,6 +76,9 @@ const Post = ({ post_id }) => {
                     </Flex>
                 </CardBody>
             </Card>
+            <Flex justifyContent="center" mt="5">
+                <Text class>Comments</Text>
+            </Flex>
             <CommentModal onClose={onClose} isOpen={isOpen} post_id={post_id}/>
         </>
     )

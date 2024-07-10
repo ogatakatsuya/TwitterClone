@@ -18,7 +18,6 @@ import { MdExpandMore } from "react-icons/md";
 
 const Replies = ({ post_id }) => {
     const [ replies, setReplies ] = useState([]);
-    
     const router = useRouter();
 
     const fetchReplies = async () => {
@@ -58,7 +57,7 @@ const Replies = ({ post_id }) => {
                                     <Avatar />
                                     <Box ml={3}>
                                         <Text fontSize='md'>
-                                            {item.user_name}
+                                            {item.user_nickname ? item.user_nickname : item.user_name}
                                         </Text>
                                         <Text fontSize='xs'>
                                             {formatDate(new Date(item.created_at))}
