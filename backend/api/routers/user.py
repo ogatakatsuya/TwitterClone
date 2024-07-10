@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Cookie, Depends, File, UploadFile
+from fastapi import APIRouter, Cookie, Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
-import shutil
 
 from api.db import get_db
 from api.schemes.profile import EditProfile, NewProfile

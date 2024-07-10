@@ -3,7 +3,6 @@ from sqlalchemy.future import select
 from fastapi import UploadFile, HTTPException
 from botocore.exceptions import NoCredentialsError
 
-import aiofiles
 import boto3
 import os
 from dotenv import load_dotenv
