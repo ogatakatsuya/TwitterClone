@@ -13,6 +13,7 @@ class User(Base):
     biography = Column(String(1024), nullable=True)
     birth_day = Column(DateTime, nullable=True)
     is_deleted = Column(Boolean, default=False, nullable=False)
+    icon_url = Column(String(1024), nullable=True)
     created_at = Column(DateTime, default=datetime.now, server_default=func.now(), nullable=False)
     
 class Password(Base):

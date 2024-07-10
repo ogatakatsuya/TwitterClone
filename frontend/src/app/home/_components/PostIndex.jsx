@@ -101,7 +101,7 @@ const PostIndex = () => {
                         <Card width="500px" key={item.id} bgColor="gray.100">
                             <CardBody>
                                 <Flex alignItems="center">
-                                    <Link href={`/profile/${item.user_id}`}><Avatar /></Link>
+                                    <Link href={`/profile/${item.user_id}`}><Avatar src={item?.icon_url}/></Link>
                                     <Box ml={3}>
                                         <Text fontSize='md'>
                                             {item.user_nickname ? item.user_nickname : item.user_name}
