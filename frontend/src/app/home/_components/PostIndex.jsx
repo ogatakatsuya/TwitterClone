@@ -23,7 +23,6 @@ const PostIndex = () => {
     const [hasMore, setHasMore] = useState(true);
     const [offset, setOffset] = useState(0);
     const observerTarget = useRef(null);
-
     const fetchPost = async (offset) => {
         try {
             const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
@@ -105,7 +104,7 @@ const PostIndex = () => {
                                     <Link href={`/profile/${item.user_id}`}><Avatar /></Link>
                                     <Box ml={3}>
                                         <Text fontSize='md'>
-                                            {item.user_name}
+                                            {item.user_nickname ? item.user_nickname : item.user_name}
                                         </Text>
                                         <Text fontSize='xs'>
                                             {formatDate(new Date(item.created_at))}

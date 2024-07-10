@@ -31,7 +31,7 @@ const Post = ({ user_id }) => {
             });
             if (res.ok) {
                 const data = await res.json();
-                if (offset == 0) { //初回表示時はレンダリングが2回行われるため
+                if (offset === 0) { //初回表示時はレンダリングが2回行われるため
                     setPost(data);
                     setOffset(0);
                     console.log(data)
@@ -39,7 +39,7 @@ const Post = ({ user_id }) => {
                     setPost((prevPosts) => [...prevPosts, ...data]);
                     console.log(data)
                 }
-                setHasMore( data.length == 10 )
+                setHasMore( data.length === 10 )
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }
@@ -94,7 +94,7 @@ const Post = ({ user_id }) => {
                                     <Avatar />
                                     <Box ml={3}>
                                         <Text fontSize='md'>
-                                            {item.user_name}
+                                            {item.user_nickname ? item.user_nickname : item.user_name}
                                         </Text>
                                         <Text fontSize='xs'>
                                             {item.created_at}
