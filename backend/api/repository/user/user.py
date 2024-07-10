@@ -16,7 +16,7 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
 CLOUDFRONT_URL = os.getenv("CLOUD_FRONT_URL")
-UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER")
+ICON_UPLOAD_FOLDER = os.getenv("ICON_UPLOAD_FOLDER")
 
 s3_client = boto3.client(
     's3',
@@ -45,8 +45,8 @@ async def edit_profile(db: AsyncSession, profile_body: NewProfile):
 async def upload_to_s3(file: UploadFile, filename: str):
     try:
         # S3にアップロード
-        s3_client.upload_fileobj(file.file, S3_BUCKET_NAME, f"{UPLOAD_FOLDER}/{filename}")
-        file_url = f"{CLOUDFRONT_URL}/{UPLOAD_FOLDER}/{filename}"
+        s3_client.upload_fileobj(file.file, S3_BUCKET_NAME, f"{ICON_UPLOAD_FOLDER}/{filename}")
+        file_url = f"{CLOUDFRONT_URL}/{ICON_UPLOAD_FOLDER}/{filename}"
         return file_url
     except NoCredentialsError:
         raise HTTPException(status_code=500, detail="AWS credentials not available")
