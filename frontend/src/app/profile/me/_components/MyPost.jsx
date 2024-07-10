@@ -91,7 +91,7 @@ const MyPost = () => {
                         <Card width="650px" key={item.id} bgColor="gray.100">
                             <CardBody>
                                 <Flex alignItems="center">
-                                    <Avatar />
+                                    <Avatar src={item?.icon_url}/>
                                     <Box ml={3}>
                                         <Text fontSize='md'>
                                             {item.user_nickname ? item.user_nickname : item.user_name}

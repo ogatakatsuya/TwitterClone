@@ -25,12 +25,12 @@ import {
     CardBody,
     HStack
 } from "@chakra-ui/react";
-
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { LiaBirthdayCakeSolid } from "react-icons/lia";
 import MyFollow from "./MyFollow";
 import MyFollower from "./MyFollower";
+import FileUploadButton from "./FileUploadButton";
 
 const MyProfileInfo = ({ user_id }) => {
     const [profile, setProfile] = useState(null);
@@ -96,7 +96,7 @@ const MyProfileInfo = ({ user_id }) => {
         <>
             <Grid templateColumns="1fr 400px" gap={50} padding={4} bgColor="gray.50">
                 <Container centerContent>
-                    <Avatar size="2xl" src={profile?.avatar_url} />
+                    <Avatar size="2xl" src={profile?.icon_url} />
                     <Text mt={1} as="b">
                         {profile?.nickname}
                     </Text>
@@ -121,6 +121,7 @@ const MyProfileInfo = ({ user_id }) => {
                         <Button bgColor="blue.200" onClick={onOpen}>
                             Edit Profile
                         </Button>
+                        <FileUploadButton />
                     </Stack>
                 </Flex>
             </Grid>

@@ -46,7 +46,7 @@ const Post = ({ post_id }) => {
             <Card width="500px" bgColor="gray.100">
                 <CardBody>
                     <Flex alignItems="center">
-                        <Avatar />
+                        <Avatar src={post?.icon_url}/>
                         <Box ml={3}>
                             <Text fontSize='md'>
                                 {post.user_nickname ? post.user_nickname : post.user_name}

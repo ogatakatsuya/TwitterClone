@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Cookie, Depends
+from fastapi import APIRouter, Cookie, Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.db import get_db
@@ -7,6 +7,7 @@ from api.schemes.profile import EditProfile, NewProfile
 from api.repository.auth.user import get_current_user_id
 from api.repository.posts.posts import get_posts_by_user_id
 from api.repository.user.user import get_profile, edit_profile
+from api.repository.user.user import save_user_icon_url, upload_to_s3
 
 router = APIRouter()
 
@@ -77,3 +78,30 @@ async def edit_profile_information(
     await edit_profile(db, new_post)
     await db.commit()
     return {"message": "Successfully edit profile"}
+
+# @router.put("/profile/icon")
+# async def edit_icon(
+#     # db: AsyncSession = Depends(get_db),
+#     # access_token: str | None = Cookie(default=None),
+#     file: UploadFile,  # ファイルアップロードにはUploadFileを使用
+# ):
+#     # user_id = await get_current_user_id(db, access_token)
+#     filename = file.filename
+#     return {"message": filename}
+#     file_url = await upload_to_s3(file, filename)
+#     return {"message": "Successfully connect to s3"}
+#     _ = await save_user_icon_url(db, user_id, file_url)
+#     return {"message": "Successfully edit icon"}
+
+@router.post("/profile/icon")
+async def get_uploadfile(
+    file: UploadFile,
+    db: AsyncSession = Depends(get_db),
+    access_token: str | None = Cookie(default=None),
+): # フロント側のFormDataのkeyに合わせる(upload_file)
+    user_id = await get_current_user_id(db, access_token)
+    filename = file.filename
+    file_url = await upload_to_s3(file, filename)
+    _ = await save_user_icon_url(db, user_id, file_url)
+    await db.commit()
+    return {"message": "Successfully edit icon"}

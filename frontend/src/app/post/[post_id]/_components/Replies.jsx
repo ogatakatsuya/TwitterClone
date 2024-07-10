@@ -54,7 +54,7 @@ const Replies = ({ post_id }) => {
                     <Card width="500px" key={item.id} mt="2" bgColor="gray.100">
                             <CardBody>
                                 <Flex alignItems="center">
-                                    <Avatar />
+                                    <Avatar src={item?.icon_url}/>
                                     <Box ml={3}>
                                         <Text fontSize='md'>
                                             {item.user_nickname ? item.user_nickname : item.user_name}
