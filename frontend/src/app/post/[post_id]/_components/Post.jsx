@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react'
+import Image from "next/image";
 import { 
     Card,
     CardBody,
@@ -60,6 +61,16 @@ const Post = ({ post_id }) => {
                         <Text mt='4' fontSize='md'>
                             {post.text}
                         </Text>
+                        {post.file_url &&
+                            <Image
+                                    src={post.file_url}
+                                    width={200}
+                                    height={200}
+                                    alt="Imege"
+                                    style={{ width: 'auto', height: 'auto' }}
+                                    priority
+                            />
+                        }
                     </Box>
                     <Flex 
                         justifyContent="flex-end" 
