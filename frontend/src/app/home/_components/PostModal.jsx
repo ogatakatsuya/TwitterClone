@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import {
   Button,
@@ -11,7 +11,9 @@ import {
   Text,
   Textarea,
   Box,
+  Input,
   Flex,
+  Image,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -25,24 +27,40 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const [submitError, setSubmitError] = useState(null)
-  const submitPost = async (value) => {
-    const endpointUrl= await process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
+  const [submitError, setSubmitError] = useState(null);
+  const inputRef = useRef(null);
+  const previewUrl = watch('preview_url');
+
+  const onFileInputChange = (event) => {
+    const { files } = event.target;
+    if (files && files[0]) {
+      setValue('preview_url', URL.createObjectURL(files[0])); // 動いた!!
+    }
+  };
+
+  const submitPost = async (values) => {
+    const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
+    const formData = new FormData();
+    formData.append('text', values.text);
+    
+    if (inputRef.current && inputRef.current.files[0]) {
+      formData.append('file', inputRef.current.files[0]);
+    }
+
     const res = await fetch(`${endpointUrl}/post`, {
       method: "POST",
       credentials: "include",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: value.text }),
+      body: formData,
     });
 
     if (!res.ok) {
       const data = await res.json();
-      console.log(data)
+      console.log(data);
       setSubmitError(data.detail);
     } else {
       onClose();
@@ -50,7 +68,6 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
       setPost((prevPosts) => [data, ...prevPosts]);
     }
   };
-  
 
   return (
     <>
@@ -66,13 +83,32 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
                 <Textarea
                   {...register('text', {
                     required: 'テキストを入力してください．',
-                    maxLength:{
+                    maxLength: {
                       value: 200,
                       message: "投稿は200文字以下で入力してください．"
                     },
                   })}
                 />
                 <FormErrorMessage>{errors.text?.message}</FormErrorMessage>
+                <Input
+                  ref={inputRef}
+                  name="preview_url"
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={onFileInputChange}
+                />
+                {previewUrl && (
+                  <Box mt={4}>
+                    {previewUrl.match(/video/i) ? (
+                      <video width="100%" controls>
+                        <source src={previewUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <Image src={previewUrl} alt="Preview" width="100%" />
+                    )}
+                  </Box>
+                )}
               </FormControl>
               {submitError && (
                 <Text color="red.500" mt={2}>
@@ -91,7 +127,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
               </Flex>
             </form>
           </ModalBody>
-          <ModalFooter/>
+          <ModalFooter />
         </ModalContent>
       </Modal>
     </>

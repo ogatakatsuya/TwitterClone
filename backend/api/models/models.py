@@ -27,6 +27,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String(200))
+    file_url = Column(String(100))
     parent_id = Column(Integer, nullable=True, default=None)
     created_at = Column(DateTime, default=datetime.now(), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, default=datetime.now(), server_default=func.now(), onupdate=datetime.now(), nullable=False)

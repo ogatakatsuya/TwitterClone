@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
     Card,
     CardBody,
@@ -116,6 +117,16 @@ const PostIndex = () => {
                                         {item.text}
                                     </Text>
                                 </Box>
+                                {item.file_url &&
+                                    <Box key={item.id}>
+                                        <Image
+                                            src={item.file_url}
+                                            width={200}
+                                            height={200}
+                                            alt="Picture of the author"
+                                        />
+                                    </Box>
+                                }
                                 <Flex
                                     justifyContent="flex-end"
                                     alignItems="flex-end"
