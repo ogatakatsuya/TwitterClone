@@ -116,17 +116,17 @@ const PostIndex = () => {
                                     <Text mt='4' fontSize='md'>
                                         {item.text}
                                     </Text>
-                                </Box>
-                                {item.file_url &&
-                                    <Box key={item.id}>
+                                    {item.file_url &&
                                         <Image
-                                            src={item.file_url}
-                                            width={200}
-                                            height={200}
-                                            alt="Picture of the author"
+                                                src={item.file_url}
+                                                width={200}
+                                                height={200}
+                                                alt="Imege"
+                                                style={{ width: 'auto', height: 'auto' }}
+                                                priority
                                         />
-                                    </Box>
-                                }
+                                    }
+                                </Box>
                                 <Flex
                                     justifyContent="flex-end"
                                     alignItems="flex-end"
