@@ -53,7 +53,7 @@ const ProfileInfo = ({ user_id }) => {
         <>
             <Grid templateColumns="1fr 400px" gap={50} padding={4} bgColor="gray.50">
                 <Container centerContent>
-                    <Avatar size="2xl" src={profile?.avatar_url} />
+                    <Avatar size="2xl" src={profile?.icon_url} />
                     <Text mt={1} as="b">
                         {profile.nickname ? profile.nickname : "unknown"}
                     </Text>

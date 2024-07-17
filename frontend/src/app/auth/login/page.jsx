@@ -15,6 +15,7 @@ import {
     Stack,
     useColorModeValue,
 } from "@chakra-ui/react";
+import toast, { Toaster } from 'react-hot-toast';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,6 +23,7 @@ import { useState } from "react";
 const Login = () => {
     const router = useRouter();
     const [submitError, setSubmitError] = useState();
+    const notify = () => toast.error("ユーザー名かパスワードが間違っています。")
 
     const {
         register,
@@ -46,6 +48,7 @@ const Login = () => {
     
             if (!res.ok) {
                 const errorData = await res.json();
+                notify();
                 setSubmitError(errorData.detail || '何か問題が発生しました');
             } else {
                 const data = await res.json();
@@ -144,6 +147,7 @@ const Login = () => {
             </Stack>
             </form>
         </Box>
+        <Toaster/>
         </Flex>
     );
 };

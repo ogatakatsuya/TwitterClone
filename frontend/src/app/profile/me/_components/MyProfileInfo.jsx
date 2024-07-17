@@ -6,41 +6,22 @@ import {
     Grid,
     Button,
     Flex,
-    Box,
     Container,
     useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    FormControl,
-    FormLabel,
-    Input,
-    Textarea,
     Stack,
     Card,
     CardBody,
-    HStack
+    HStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form"
-import { LiaBirthdayCakeSolid } from "react-icons/lia";
 import MyFollow from "./MyFollow";
 import MyFollower from "./MyFollower";
 import FileUploadButton from "./FileUploadButton";
+import ProfileModal from "./ProfileModal";
 
-const MyProfileInfo = ({ user_id }) => {
+const MyProfileInfo = () => {
     const [profile, setProfile] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors, isSubmitting },
-    } = useForm()
 
     const fetchProfile = async () => {
         const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
@@ -58,28 +39,6 @@ const MyProfileInfo = ({ user_id }) => {
     useEffect(() => {
         fetchProfile();
     }, []);
-
-    const editHandler = async (value) => {
-        const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-        const res = await fetch(`${endpointUrl}/profile`,{
-            method: "PUT",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nickname: value.nickname,
-                biography: value.biography,
-                birth_day: value.birthday
-            })
-        })
-        if(res.ok){
-            onClose();
-            fetchProfile();
-        } else {
-            console.log("error");
-        }
-    }
 
     const formatDate = (date) => {
         const year = date.getFullYear();
@@ -125,49 +84,7 @@ const MyProfileInfo = ({ user_id }) => {
                     </Stack>
                 </Flex>
             </Grid>
-            <Modal
-                isOpen={isOpen}
-                onClose={onClose}
-            >
-                <ModalOverlay />
-                <ModalContent>
-                <ModalHeader>Edit your profile</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody pb={6}>
-                    <form onSubmit={handleSubmit(editHandler)}>
-                        <FormControl>
-                        <FormLabel>Nickname</FormLabel>
-                        <Input placeholder='Nick Name' {
-                            ...register("nickname")
-                        } 
-                        value={profile.nickname}/>
-                        </FormControl>
-
-                        <FormControl mt={4}>
-                        <FormLabel>Birthday</FormLabel>
-                        <Input placeholder='Birthday' type="date" {
-                            ...register("birthday")
-                        } 
-                        default={profile.birth_day}/>
-                        </FormControl>
-
-                        <FormControl mt={4}>
-                        <FormLabel>Biography</FormLabel>
-                        <Textarea placeholder='Biography' {
-                            ...register("biography")
-                        }
-                        default={profile.biography}/>
-                        </FormControl>
-                        <Flex justifyContent="end">
-                            <Button colorScheme='blue' mr={3} type="submit" isLoading={isSubmitting} mt={4}>
-                                Edit
-                            </Button>
-                            <Button onClick={onClose} mt={4}>Cancel</Button>
-                        </Flex>
-                    </form>
-                </ModalBody>
-                </ModalContent>
-            </Modal>
+            <ProfileModal isOpen={isOpen} onClose={onClose} profile={profile} fetchProfile={fetchProfile}/>
         </>
     );
 };

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import  toast, { Toaster } from 'react-hot-toast'
 import {
     Button,
     FormErrorMessage,
@@ -31,6 +32,7 @@ export default function CommentModal({ isOpen, onClose, post_id }) {
     } = useForm()
 
     const [submitError, setSubmitError] = useState(null)
+    const notify = () => toast.success('Successfully commented!')
 
     const submitReply = async (value) => {
         const endpointUrl= await process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL
@@ -51,6 +53,7 @@ export default function CommentModal({ isOpen, onClose, post_id }) {
             onClose();
             const data = await res.json();
             console.log(data.message);
+            notify();
         }
     };
 
@@ -91,6 +94,7 @@ export default function CommentModal({ isOpen, onClose, post_id }) {
             <ModalFooter/>
             </ModalContent>
         </Modal>
+        <Toaster />
         </>
     )
 }

@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import toast, { Toaster } from "react-hot-toast";
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const Register = () => {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [submitError, setSubmitError] = useState();
+    const notify = () => toast.success("アカウントが正常に作成されました。");
 
     const {
         register,
@@ -51,7 +53,8 @@ const Register = () => {
         } else {
             const data = await res.json()
             setSubmitError(null)
-            router.push("/auth/login")
+            notify();
+            router.push("/auth/login");
         }
         } catch (err) {
         setSubmitError('ネットワークエラーです。後で再試行してください。')
@@ -153,6 +156,7 @@ const Register = () => {
             </Stack>
             </form>
         </Box>
+        <Toaster/>
         </Flex>
     );
 };
