@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { Button } from '@chakra-ui/react';
 
+import toast, { Toaster } from 'react-hot-toast';
+
 const FileUploadButton = () => {
   const fileInputRef = useRef(null);
 
@@ -10,18 +12,13 @@ const FileUploadButton = () => {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
+    const notify = () => toast.success('Icon image uploaded successfully');
     if (file) {
-      console.log('Selected file:', file);
-
-      // FormDataを作成し、ファイルを追加
       const formData = new FormData();
       formData.append('file', file);
 
       try {
-        // バックエンドのエンドポイントURL
         const endpointUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL;
-
-        // POSTリクエストを送信
         const res = await fetch(`${endpointUrl}/profile/icon`, {
           method: 'POST',
           body: formData,
@@ -30,16 +27,12 @@ const FileUploadButton = () => {
 
         if (!res.ok) {
           const data = await res.json();
-          console.error('Upload failed:', data);
-          // エラー処理を行う
         } else {
           const data = await res.json();
-          console.log('Upload successful:', data);
-          // 成功時の処理を行う
+          notify();
         }
       } catch (error) {
         console.error('Error uploading file:', error);
-        // エラー処理を行う
       }
     }
   };
@@ -52,9 +45,11 @@ const FileUploadButton = () => {
       <input
         type="file"
         ref={fileInputRef}
+        accept="image/*"
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
+      <Toaster />
     </>
   );
 };

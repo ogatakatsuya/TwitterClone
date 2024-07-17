@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import toast, { Toaster } from 'react-hot-toast'
 import {
   Button,
   FormErrorMessage,
@@ -35,6 +36,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
   const [submitError, setSubmitError] = useState(null);
   const inputRef = useRef(null);
   const previewUrl = watch('preview_url');
+  const notify = () => toast.success('Successfully posted!');
 
   const onFileInputChange = (event) => {
     const { files } = event.target;
@@ -66,6 +68,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
       onClose();
       const data = await res.json();
       setPost((prevPosts) => [data, ...prevPosts]);
+      notify();
     }
   };
 
@@ -94,19 +97,12 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
                   ref={inputRef}
                   name="preview_url"
                   type="file"
-                  accept="image/*,video/*"
+                  accept="image/*"
                   onChange={onFileInputChange}
                 />
                 {previewUrl && (
                   <Box mt={4}>
-                    {previewUrl.match(/video/i) ? (
-                      <video width="100%" controls>
-                        <source src={previewUrl} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : (
                       <Image src={previewUrl} alt="Preview" width="100%" />
-                    )}
                   </Box>
                 )}
               </FormControl>
@@ -130,6 +126,7 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
           <ModalFooter />
         </ModalContent>
       </Modal>
+      <Toaster />
     </>
   )
 }
