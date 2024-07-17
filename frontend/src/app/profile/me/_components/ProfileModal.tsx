@@ -68,8 +68,7 @@ const ProfileModal = ({isOpen,onClose,profile, fetchProfile}) => {
                                 required: "Nickname is required",
                             })
                         } 
-                        default={profile.nickname}/>
-                        <FormErrorMessage>{errors.nickname?.message}</FormErrorMessage>
+                        defaultValue={profile.nickname}/>
                         </FormControl>
 
                         <FormControl mt={4}>
@@ -79,8 +78,7 @@ const ProfileModal = ({isOpen,onClose,profile, fetchProfile}) => {
                                 required: "Birthday is required",
                             })
                         } 
-                        default={profile.birth_day}/>
-                        <FormErrorMessage>{errors.birthday?.message}</FormErrorMessage>
+                        defaultValue={profile.birth_day}/>
                         </FormControl>
 
                         <FormControl mt={4}>
@@ -90,8 +88,7 @@ const ProfileModal = ({isOpen,onClose,profile, fetchProfile}) => {
                                 required: "Biography is required",
                             })
                         }
-                        default={profile.biography}/>
-                        <FormErrorMessage>{errors.biography?.message}</FormErrorMessage>
+                        defaultValue={profile.biography}/>
                         </FormControl>
                         <Flex justifyContent="end">
                             <Button colorScheme='blue' mr={3} type="submit" isLoading={isSubmitting} mt={4}>
