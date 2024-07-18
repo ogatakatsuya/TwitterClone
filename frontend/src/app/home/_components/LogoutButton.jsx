@@ -15,7 +15,6 @@ const LogoutButton = () => {
             });
             if(res.ok){
                 const data = await res.json();
-                console.log(data.message);
                 router.push("/auth/login");
             } else {
                 console.error("Error logout.", res.statusText);

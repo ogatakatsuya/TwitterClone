@@ -47,12 +47,10 @@ export default function CommentModal({ isOpen, onClose, post_id }) {
 
         if (!res.ok) {
             const data = await res.json();
-            console.log(data)
             setSubmitError(data.detail);
         } else {
             onClose();
             const data = await res.json();
-            console.log(data.message);
             notify();
         }
     };

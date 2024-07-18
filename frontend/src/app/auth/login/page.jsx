@@ -52,7 +52,6 @@ const Login = () => {
                 setSubmitError(errorData.detail || '何か問題が発生しました');
             } else {
                 const data = await res.json();
-                console.log(data);
                 setSubmitError(null);
                 router.push("/home");
             }
