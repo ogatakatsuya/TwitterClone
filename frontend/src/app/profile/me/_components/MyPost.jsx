@@ -13,7 +13,7 @@ import {
     IconButton,
     StackDivider,
     Stack,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 import { MdExpandMore } from "react-icons/md";
 
 const MyPost = () => {
@@ -21,6 +21,7 @@ const MyPost = () => {
     const [post, setPost] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [offset, setOffset] = useState(0);
+    const [initialLoad, setInitialLoad] = useState(true); // 初回ロードフラグ
     const observerTarget = useRef(null);
 
     const fetchPost = async (offset) => {
@@ -32,15 +33,13 @@ const MyPost = () => {
             });
             if (res.ok) {
                 const data = await res.json();
-                if (offset === 0) { //初回表示時はレンダリングが2回行われるため
+                if (offset === 0 && initialLoad) { // 初回表示時は上書きする
                     setPost(data);
-                    setOffset(0);
-                    console.log(data)
+                    setInitialLoad(false); // 初回ロードを完了としてマーク
                 } else {
                     setPost((prevPosts) => [...prevPosts, ...data]);
-                    console.log(data)
                 }
-                setHasMore( data.length === 10 )
+                setHasMore(data.length === 10);
             } else {
                 console.error("Error fetching posts:", res.statusText);
             }
@@ -50,12 +49,7 @@ const MyPost = () => {
     };
 
     useEffect(() => {
-        fetchPost(offset)
-    },[])
-    
-    useEffect(() => {
-        if (hasMore && offset>0) {
-            console.log("fetch post")
+        if (hasMore && offset > 0) {
             fetchPost(offset);
         }
     }, [offset, hasMore]);
@@ -82,7 +76,7 @@ const MyPost = () => {
 
     const redirectToDetail = (post_id) => {
         router.push(`/post/${post_id}`);
-    }
+    };
 
     return (
         <>
@@ -92,7 +86,7 @@ const MyPost = () => {
                         <Card width="650px" key={item.id} bgColor="gray.100">
                             <CardBody>
                                 <Flex alignItems="center">
-                                    <Avatar src={item?.icon_url}/>
+                                    <Avatar src={item?.icon_url} />
                                     <Box ml={3}>
                                         <Text fontSize='md'>
                                             {item.user_nickname ? item.user_nickname : item.user_name}
@@ -108,12 +102,12 @@ const MyPost = () => {
                                     </Text>
                                     {item.file_url &&
                                         <Image
-                                                src={item.file_url}
-                                                width={200}
-                                                height={200}
-                                                alt="Imege"
-                                                style={{ width: 'auto', height: 'auto' }}
-                                                priority
+                                            src={item.file_url}
+                                            width={200}
+                                            height={200}
+                                            alt="Image"
+                                            style={{ width: 'auto', height: 'auto' }}
+                                            priority
                                         />
                                     }
                                 </Box>
@@ -139,6 +133,6 @@ const MyPost = () => {
             </Box>
         </>
     );
-}
+};
 
 export default MyPost;

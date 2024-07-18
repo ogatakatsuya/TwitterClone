@@ -47,10 +47,6 @@ const Post = ({ user_id }) => {
             console.error("Error fetching posts:", error);
         }
     };
-
-    useEffect(() => {
-        fetchPost(offset)
-    },[])
     
     useEffect(() => {
         if (hasMore && offset>0) {

@@ -11,7 +11,7 @@ DB_HOST = os.getenv('DB_HOST')
 DB_NAME = os.getenv('DB_NAME')
 
 DB_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:3306/{DB_NAME}?charset=utf8"
-engine = create_engine(DB_URL, echo=True)
+engine = create_engine(DB_URL)
 
 
 def reset_database():
