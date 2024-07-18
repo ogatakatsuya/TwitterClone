@@ -62,7 +62,6 @@ export default function PostModal({ isOpen, onOpen, onClose, setPost }) {
 
     if (!res.ok) {
       const data = await res.json();
-      console.log(data);
       setSubmitError(data.detail);
     } else {
       onClose();

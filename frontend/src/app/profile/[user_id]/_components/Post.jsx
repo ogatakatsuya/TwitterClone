@@ -34,10 +34,8 @@ const Post = ({ user_id }) => {
                 if (offset === 0) { //初回表示時はレンダリングが2回行われるため
                     setPost(data);
                     setOffset(0);
-                    console.log(data)
                 } else {
                     setPost((prevPosts) => [...prevPosts, ...data]);
-                    console.log(data)
                 }
                 setHasMore( data.length === 10 )
             } else {
@@ -50,7 +48,6 @@ const Post = ({ user_id }) => {
     
     useEffect(() => {
         if (hasMore && offset>0) {
-            console.log("fetch post")
             fetchPost(offset);
         }
     }, [offset, hasMore]);

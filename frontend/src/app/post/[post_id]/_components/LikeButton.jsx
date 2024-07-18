@@ -28,10 +28,9 @@ const LikeButton = ({ post_id }) => {
 
         if (res.ok) {
             const data = await res.json();
-            console.log(data);
             setLikeNum(prev => prev + (method === 'POST' ? 1 : -1));
         } else {
-            console.log('error');
+            console.error('Error:');
         }
     };
 

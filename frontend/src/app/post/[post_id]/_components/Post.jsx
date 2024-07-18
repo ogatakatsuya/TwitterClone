@@ -25,7 +25,6 @@ const Post = ({ post_id }) => {
         const res = await fetch(`${endpointUrl}/post/${post_id}`)
         if(res.ok){
             const data = await res.json();
-            console.log(data)
             setPost(data);
         }
     }
